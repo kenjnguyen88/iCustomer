@@ -1,16 +1,28 @@
 package vn.esfot.platform.icustomer.responses;
 
-public class LoginResponse {
-    private String token;
+import java.util.Map;
 
+public class LoginResponse {
+    private Map<String, Object> userAttributes;
+    private String accessToken;
+    private String refreshToken;
     private long expiresIn;
 
-    public String getToken() {
-        return token;
+    public String getRefreshToken() {
+        return refreshToken;
     }
 
-    public LoginResponse setToken(String token) {
-        this.token = token;
+    public LoginResponse setRefreshToken(String refreshToken) {
+        this.refreshToken = refreshToken;
+        return this;
+    }
+
+    public String getAccessToken() {
+        return accessToken;
+    }
+
+    public LoginResponse setAccessToken(String accessToken) {
+        this.accessToken = accessToken;
         return this;
     }
 
@@ -23,10 +35,15 @@ public class LoginResponse {
         return this;
     }
 
+    public LoginResponse setUserAttributes(Map<String, Object> userAttributes) {
+        this.userAttributes = userAttributes;
+        return this;
+    }
+
     @Override
     public String toString() {
         return "LoginResponse{" +
-                "token='" + token + '\'' +
+                "token='" + accessToken + '\'' +
                 ", expiresIn=" + expiresIn +
                 '}';
     }

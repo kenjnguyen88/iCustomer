@@ -1,13 +1,17 @@
 package vn.esfot.platform.icustomer.services;
 
-import vn.esfot.platform.icustomer.dtos.LoginUserDto;
-import vn.esfot.platform.icustomer.dtos.RegisterUserDto;
-import vn.esfot.platform.icustomer.entities.customer;
-import vn.esfot.platform.icustomer.repositories.UserRepository;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import vn.esfot.platform.icustomer.dtos.LoginUserDto;
+import vn.esfot.platform.icustomer.dtos.RegisterUserDto;
+import vn.esfot.platform.icustomer.entities.CustomerEntity;
+import vn.esfot.platform.icustomer.repositories.UserRepository;
+import vn.esfot.platform.icustomer.responses.LoginResponse;
+import vn.esfot.platform.icustomer.utils.CustomerUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,38 +22,52 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
+    private final JwtService jwtService;
+
     public AuthenticationService(
-        UserRepository userRepository,
-        AuthenticationManager authenticationManager,
-        PasswordEncoder passwordEncoder
-    ) {
+            UserRepository userRepository,
+            AuthenticationManager authenticationManager,
+            PasswordEncoder passwordEncoder,
+            JwtService jwtService) {
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
     }
 
-    public customer signup(RegisterUserDto input) {
-        var user = new customer()
-            .setFullName(input.getFullName())
-            .setEmail(input.getEmail())
-            .setPassword(passwordEncoder.encode(input.getPassword()));
+    public CustomerEntity signup(RegisterUserDto input) {
+        var user = new CustomerEntity()
+                .setFullName(input.getFullName())
+                .setEmail(input.getEmail())
+                .setPassword(passwordEncoder.encode(input.getPassword()));
 
         return userRepository.save(user);
     }
 
-    public customer authenticate(LoginUserDto input) {
-        authenticationManager.authenticate(
-            new UsernamePasswordAuthenticationToken(
-                input.getEmail(),
-                input.getPassword()
-            )
-        );
+    public LoginResponse authenticate(LoginUserDto input) {
 
-        return userRepository.findByEmail(input.getEmail()).orElseThrow();
+        LoginResponse loginResponse = null;
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        input.getEmail(),
+                        input.getPassword()
+                )
+        );
+        if (authentication.isAuthenticated()) {
+            CustomerEntity customerAuthenticated = userRepository.findByEmail(input.getEmail()).orElseThrow();
+            String jwtToken = jwtService.generateToken(CustomerUtils.claims(customerAuthenticated), customerAuthenticated);
+            String jwtRefreshToken = jwtService.generateRefreshToken(CustomerUtils.claims(customerAuthenticated), customerAuthenticated);
+            loginResponse = new LoginResponse()
+                    .setAccessToken(jwtToken)
+                    .setRefreshToken(jwtRefreshToken)
+                    .setUserAttributes(CustomerUtils.claims(customerAuthenticated))
+                    .setExpiresIn(jwtService.getExpirationTime());
+        } else throw new BadCredentialsException("Can not login");
+        return loginResponse;
     }
 
-    public List<customer> allUsers() {
-        List<customer> users = new ArrayList<>();
+    public List<CustomerEntity> allUsers() {
+        List<CustomerEntity> users = new ArrayList<>();
 
         userRepository.findAll().forEach(users::add);
 

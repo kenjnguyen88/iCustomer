@@ -1,6 +1,6 @@
 package vn.esfot.platform.icustomer.services;
 
-import vn.esfot.platform.icustomer.entities.customer;
+import vn.esfot.platform.icustomer.entities.CustomerEntity;
 import vn.esfot.platform.icustomer.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,8 +15,8 @@ public class UserService {
         this.userRepository = userRepository;
     }
 
-    public List<customer> allUsers() {
-        List<customer> users = new ArrayList<>();
+    public List<CustomerEntity> allUsers() {
+        List<CustomerEntity> users = new ArrayList<>();
 
         userRepository.findAll().forEach(users::add);
 

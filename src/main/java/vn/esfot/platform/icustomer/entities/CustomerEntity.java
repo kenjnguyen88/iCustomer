@@ -2,22 +2,24 @@
 package vn.esfot.platform.icustomer.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Imported;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+import java.io.Serial;
+import java.time.Instant;
 import java.util.Collection;
-import java.util.Date;
 import java.util.List;
 
 @Table(name = "customers")
 @Entity
-public class customer implements UserDetails {
+public class CustomerEntity extends BaseEntity implements UserDetails {
+    @Serial
+    private static final long serialVersionUID = 6833921540428414446L;
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false)
     private String fullName;
@@ -28,13 +30,6 @@ public class customer implements UserDetails {
     @Column(nullable = false)
     private String password;
 
-    @CreationTimestamp
-    @Column(updatable = false, name = "created_at")
-    private Date createdAt;
-
-    @UpdateTimestamp
-    @Column(name = "updated_at")
-    private Date updatedAt;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -70,11 +65,11 @@ public class customer implements UserDetails {
         return true;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public customer setId(Integer id) {
+    public CustomerEntity setId(Long id) {
         this.id = id;
         return this;
     }
@@ -83,7 +78,7 @@ public class customer implements UserDetails {
         return fullName;
     }
 
-    public customer setFullName(String fullName) {
+    public CustomerEntity setFullName(String fullName) {
         this.fullName = fullName;
         return this;
     }
@@ -92,32 +87,42 @@ public class customer implements UserDetails {
         return email;
     }
 
-    public customer setEmail(String email) {
+    public CustomerEntity setEmail(String email) {
         this.email = email;
         return this;
     }
 
-    public customer setPassword(String password) {
+    public CustomerEntity setPassword(String password) {
         this.password = password;
         return this;
     }
 
-    public Date getCreatedAt() {
+    public Instant getCreatedAt() {
         return createdAt;
     }
 
-    public customer setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-        return this;
-    }
+//    public CustomerEntity setCreatedAt(Instant createdAt) {
+//        this.createdAt = createdAt;
+//        return this;
+//    }
 
-    public Date getUpdatedAt() {
+    public Instant getUpdatedAt() {
         return updatedAt;
     }
 
-    public customer setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-        return this;
+//    public CustomerEntity setUpdatedAt(Instant updatedAt) {
+//        this.updatedAt = updatedAt;
+//        return this;
+//    }
+
+    @Override
+    public String getCreatedBy() {
+        return super.getCreatedBy();
+    }
+
+    @Override
+    public void setCreatedBy(String createdBy) {
+        super.setCreatedBy(createdBy);
     }
 
     @Override

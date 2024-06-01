@@ -1,6 +1,6 @@
 package vn.esfot.platform.icustomer.controllers;
 
-import vn.esfot.platform.icustomer.entities.customer;
+import vn.esfot.platform.icustomer.entities.CustomerEntity;
 import vn.esfot.platform.icustomer.services.UserService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -21,17 +21,17 @@ public class UserController {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<customer> authenticatedUser() {
+    public ResponseEntity<CustomerEntity> authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        customer currentUser = (customer) authentication.getPrincipal();
+        CustomerEntity currentUser = (CustomerEntity) authentication.getPrincipal();
 
         return ResponseEntity.ok(currentUser);
     }
 
     @GetMapping
-    public ResponseEntity<List<customer>> allUsers() {
-        List <customer> users = userService.allUsers();
+    public ResponseEntity<List<CustomerEntity>> allUsers() {
+        List <CustomerEntity> users = userService.allUsers();
 
         return ResponseEntity.ok(users);
     }
