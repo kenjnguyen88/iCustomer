@@ -9,6 +9,7 @@ public class CustomerUtils {
 
     public static Map<String, Object> claims(CustomerEntity customer) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("customerId", customer.getId());
         claims.put("email", customer.getEmail());
         claims.put("fullName", customer.getFullName());
         return claims;

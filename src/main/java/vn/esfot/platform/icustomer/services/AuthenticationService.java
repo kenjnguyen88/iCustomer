@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import vn.esfot.platform.icustomer.dtos.LoginUserDto;
 import vn.esfot.platform.icustomer.dtos.RegisterUserDto;
 import vn.esfot.platform.icustomer.entities.CustomerEntity;
+import vn.esfot.platform.icustomer.entities.SecurityTokenEntity;
+import vn.esfot.platform.icustomer.repositories.SecurityTokenRepository;
 import vn.esfot.platform.icustomer.repositories.UserRepository;
 import vn.esfot.platform.icustomer.responses.LoginResponse;
 import vn.esfot.platform.icustomer.utils.CustomerUtils;
@@ -19,6 +21,8 @@ import java.util.List;
 @Service
 public class AuthenticationService {
     private final UserRepository userRepository;
+
+    private final SecurityTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
@@ -26,9 +30,10 @@ public class AuthenticationService {
 
     public AuthenticationService(
             UserRepository userRepository,
-            AuthenticationManager authenticationManager,
+            SecurityTokenRepository tokenRepository, AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
             JwtService jwtService) {
+        this.tokenRepository = tokenRepository;
         this.authenticationManager = authenticationManager;
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
@@ -55,13 +60,16 @@ public class AuthenticationService {
         );
         if (authentication.isAuthenticated()) {
             CustomerEntity customerAuthenticated = userRepository.findByEmail(input.getEmail()).orElseThrow();
-            String jwtToken = jwtService.generateToken(CustomerUtils.claims(customerAuthenticated), customerAuthenticated);
-            String jwtRefreshToken = jwtService.generateRefreshToken(CustomerUtils.claims(customerAuthenticated), customerAuthenticated);
+//            String jwtToken = jwtService.generateToken(CustomerUtils.claims(customerAuthenticated), customerAuthenticated);
+//            String jwtRefreshToken = jwtService.generateRefreshToken(CustomerUtils.claims(customerAuthenticated), customerAuthenticated);
+            SecurityTokenEntity token = jwtService.generateSecurityToken(CustomerUtils.claims(customerAuthenticated), customerAuthenticated);
             loginResponse = new LoginResponse()
-                    .setAccessToken(jwtToken)
-                    .setRefreshToken(jwtRefreshToken)
+                    .setAccessToken(token.getAccessToken())
+                    .setRefreshToken(token.getRefreshToken())
                     .setUserAttributes(CustomerUtils.claims(customerAuthenticated))
                     .setExpiresIn(jwtService.getExpirationTime());
+            this.tokenRepository.save(token);
+
         } else throw new BadCredentialsException("Can not login");
         return loginResponse;
     }

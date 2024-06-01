@@ -2,7 +2,6 @@
 package vn.esfot.platform.icustomer.entities;
 
 import jakarta.persistence.*;
-import org.hibernate.annotations.Imported;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -13,7 +12,7 @@ import java.util.List;
 
 @Table(name = "customers")
 @Entity
-public class CustomerEntity extends BaseEntity implements UserDetails {
+public class CustomerEntity implements UserDetails {
     @Serial
     private static final long serialVersionUID = 6833921540428414446L;
     @Id
@@ -29,6 +28,18 @@ public class CustomerEntity extends BaseEntity implements UserDetails {
 
     @Column(nullable = false)
     private String password;
+
+    @Column(name = "created_by")
+    private String createdBy;
+
+    @Column(name = "updated_by")
+    private String updatedBy;
+
+    @Column(name = "created_at")
+    private Instant createdAt;
+
+    @Column(name = "updated_at")
+    private Instant updatedAt;
 
 
     @Override
@@ -97,32 +108,36 @@ public class CustomerEntity extends BaseEntity implements UserDetails {
         return this;
     }
 
+    public String getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(String createdBy) {
+        this.createdBy = createdBy;
+    }
+
+    public String getUpdatedBy() {
+        return updatedBy;
+    }
+
+    public void setUpdatedBy(String updatedBy) {
+        this.updatedBy = updatedBy;
+    }
+
     public Instant getCreatedAt() {
         return createdAt;
     }
 
-//    public CustomerEntity setCreatedAt(Instant createdAt) {
-//        this.createdAt = createdAt;
-//        return this;
-//    }
+    public void setCreatedAt(Instant createdAt) {
+        this.createdAt = createdAt;
+    }
 
     public Instant getUpdatedAt() {
         return updatedAt;
     }
 
-//    public CustomerEntity setUpdatedAt(Instant updatedAt) {
-//        this.updatedAt = updatedAt;
-//        return this;
-//    }
-
-    @Override
-    public String getCreatedBy() {
-        return super.getCreatedBy();
-    }
-
-    @Override
-    public void setCreatedBy(String createdBy) {
-        super.setCreatedBy(createdBy);
+    public void setUpdatedAt(Instant updatedAt) {
+        this.updatedAt = updatedAt;
     }
 
     @Override
