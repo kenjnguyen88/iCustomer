@@ -3,6 +3,7 @@ package vn.esoft.platform.icustomer.entities;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
@@ -105,9 +106,20 @@ public class CustomerEntity extends BaseEntity implements UserDetails {
         return urlResources;
     }
 
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return List.of();
+//    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+
+        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
+        this.getRoles().forEach(e->{
+            SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + e.toString());
+            authorityList.add(authority);
+        });
+        return authorityList;
     }
 
     public String getPassword() {

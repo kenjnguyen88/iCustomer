@@ -25,7 +25,6 @@ import java.util.*;
 @Slf4j
 public class AuthenticationService {
     private final UserRepository userRepository;
-
     private final SecurityTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
