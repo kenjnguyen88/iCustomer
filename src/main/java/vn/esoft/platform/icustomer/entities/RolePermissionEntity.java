@@ -96,4 +96,6 @@ public class RolePermissionEntity {
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
     }
+
+
 }

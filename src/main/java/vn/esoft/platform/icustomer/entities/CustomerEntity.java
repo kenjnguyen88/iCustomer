@@ -7,9 +7,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.time.Instant;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Table(name = "customers")
 @Entity
@@ -45,6 +43,35 @@ public class CustomerEntity extends BaseEntity implements UserDetails {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+    public Map<String, List<String>> scope() {
+        Map<String, List<String>> scope = new HashMap<>();
+        List<RoleEntity> roleEntities = this.getCustomerRoles().stream().map(CustomerRoleEntity::getRole).toList();
+        scope.put("roles", roleEntities.stream().map(e -> e.getName()).toList());
+
+        List<String> permission = new ArrayList<>();
+        List<String> urlResources = new ArrayList<>();
+        List<String> nameResources = new ArrayList<>();
+        for (RoleEntity roleEntity : roleEntities) {
+            Set<RolePermissionEntity> rolePermissionEntities = roleEntity.getRolePermissions();
+            for (RolePermissionEntity rolePermissionEntity : rolePermissionEntities) {
+                permission.add(rolePermissionEntity.getPermission().getName());
+            }
+            Set<RoleResourceEntity> roleResources = roleEntity.getRoleResources();
+            for (RoleResourceEntity roleResourceEntity : roleResources) {
+                urlResources.add(roleResourceEntity.getResource().getUrl());
+                nameResources.add(roleResourceEntity.getResource().getName());
+            }
+        }
+        if (permission.size() != 0) {
+            scope.put("permissions", permission);
+        }
+        if (urlResources.size() != 0) {
+            scope.put("urlResources", urlResources);
+            scope.put("nameResources", nameResources);
+        }
+        return scope;
+    }
+
     public CustomerEntity() {
         this.createdAt();
     }
@@ -55,14 +82,27 @@ public class CustomerEntity extends BaseEntity implements UserDetails {
     }
 
     public List<String> getPermissions() {
-
+        List<String> permission = new ArrayList<>();
         List<RoleEntity> roleEntities = this.getCustomerRoles().stream().map(customerRoleEntity -> customerRoleEntity.getcRoleInstance()).toList();
-
-        return null;
+        for (RoleEntity roleEntity : roleEntities) {
+            Set<RolePermissionEntity> rolePermissionEntities = roleEntity.getRolePermissions();
+            for (RolePermissionEntity rolePermissionEntity : rolePermissionEntities) {
+                permission.add(rolePermissionEntity.getPermission().getName());
+            }
+        }
+        return permission;
     }
 
     public List<String> getResources() {
-        return null;
+        List<String> urlResources = new ArrayList<>();
+        List<RoleEntity> roleEntities = this.getCustomerRoles().stream().map(customerRoleEntity -> customerRoleEntity.getcRoleInstance()).toList();
+        for (RoleEntity roleEntity : roleEntities) {
+            Set<RoleResourceEntity> roleResources = roleEntity.getRoleResources();
+            for (RoleResourceEntity roleResourceEntity : roleResources) {
+                urlResources.add(roleResourceEntity.getResource().getUrl());
+            }
+        }
+        return urlResources;
     }
 
     @Override

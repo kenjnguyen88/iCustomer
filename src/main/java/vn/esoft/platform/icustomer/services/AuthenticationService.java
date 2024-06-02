@@ -21,6 +21,7 @@ import vn.esoft.platform.icustomer.utils.JSonUtils;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -65,20 +66,17 @@ public class AuthenticationService {
         );
         if (authentication.isAuthenticated()) {
             CustomerEntity customerAuthenticated = userRepository.findByEmail(input.getEmail()).orElseThrow();
-//            String jwtToken = jwtService.generateToken(CustomerUtils.claims(customerAuthenticated), customerAuthenticated);
-//            String jwtRefreshToken = jwtService.generateRefreshToken(CustomerUtils.claims(customerAuthenticated), customerAuthenticated);
-            Set<CustomerRoleEntity> customerRoles = customerAuthenticated.getCustomerRoles();
-//            List<RoleEntity> roleEntities = customerRoles.stream().map(customerRoleEntity -> customerRoleEntity.getcRoleInstance()).toList();
-//            List<RoleEntity> roles = customerRoles.stream().map(CustomerRoleEntity::getRole).toList();
-            List<String> rolesName = customerAuthenticated.getRoles();
-            List<String> permissionName = customerAuthenticated.getPermissions();
-            List<String> resourceURLName = customerAuthenticated.getResources();
-            log.info("roles: {}", JSonUtils.toJson(customerRoles.stream().map(CustomerRoleEntity::getRole)));
-            SecurityTokenEntity token = jwtService.generateSecurityToken(CustomerUtils.claims(customerAuthenticated), customerAuthenticated);
+
+//            List<String> rolesName = customerAuthenticated.getRoles();
+//            List<String> permissionName = customerAuthenticated.getPermissions();
+//            List<String> resourceURLName = customerAuthenticated.getResources();
+//            log.info("roles: {}", JSonUtils.toJson(customerRoles.stream().map(CustomerRoleEntity::getRole)));
+            Map<String, List<String>> scopeCustomer = customerAuthenticated.scope();
+            SecurityTokenEntity token = jwtService.generateSecurityToken(CustomerUtils.claims(customerAuthenticated, scopeCustomer), customerAuthenticated);
             loginResponse = new LoginResponse()
                     .setAccessToken(token.getAccessToken())
                     .setRefreshToken(token.getRefreshToken())
-                    .setUserAttributes(CustomerUtils.claims(customerAuthenticated))
+                    .setUserAttributes(CustomerUtils.claims(customerAuthenticated, scopeCustomer))
                     .setExpiresIn(jwtService.getExpirationTime());
             this.tokenRepository.save(token);
 
