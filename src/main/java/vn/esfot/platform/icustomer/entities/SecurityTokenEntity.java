@@ -8,7 +8,7 @@ import java.time.Instant;
 
 @Table(name = "security_tokens")
 @Entity
-public class SecurityTokenEntity implements Serializable {
+public class SecurityTokenEntity extends BaseEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 7772311196128235344L;
 
@@ -139,15 +139,6 @@ public class SecurityTokenEntity implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public void createAt() {
-        this.createdAt = Instant.now();
-        this.createdBy = "system";
-    }
-
-    public void updateBy() {
-        this.updatedAt = Instant.now();
-        this.updatedBy = "system";
-    }
 
     public SecurityTokenEntity(String customerId, String accessToken, String refreshToken, String status, Instant accessTokenExpiresAt, Instant refreshTokenExpiresAt, Instant issued_at) {
         this.customerId = customerId;
@@ -157,8 +148,18 @@ public class SecurityTokenEntity implements Serializable {
         this.accessTokenExpiresAt = accessTokenExpiresAt;
         this.refreshTokenExpiresAt = refreshTokenExpiresAt;
         this.issued_at = issued_at;
-        this.createAt();
+        this.createdAt();
     }
 
+    @Override
+    public void createdAt() {
+        this.createdAt = Instant.now();
+        this.createdBy = "sys";
+    }
 
+    @Override
+    public void updatedAt() {
+        this.updatedAt = Instant.now();
+        this.updatedBy = "sys";
+    }
 }

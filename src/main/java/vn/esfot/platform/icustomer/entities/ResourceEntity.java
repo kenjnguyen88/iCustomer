@@ -2,23 +2,22 @@ package vn.esfot.platform.icustomer.entities;
 
 import jakarta.persistence.*;
 
-import java.io.Serial;
 import java.io.Serializable;
 import java.time.Instant;
 
-@Table(name = "permissions")
+@Table(name = "resources")
 @Entity
-public class PermissionEntity extends BaseEntity implements Serializable {
-    @Serial
-    private static final long serialVersionUID = -3450015457153933227L;
+public class ResourceEntity extends BaseEntity implements Serializable {
 
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "name", nullable = false)
     private String name;
+    @Column(name = "url", nullable = false)
+    private String url;
+
     @Column(name = "created_by")
     private String createdBy;
 
@@ -30,11 +29,6 @@ public class PermissionEntity extends BaseEntity implements Serializable {
 
     @Column(name = "updated_at")
     private Instant updatedAt;
-
-    public Long getId() {
-        return id;
-    }
-
 
     public String getName() {
         return name;

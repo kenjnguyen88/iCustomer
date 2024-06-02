@@ -45,7 +45,6 @@ public class AuthenticationService {
                 .setFullName(input.getFullName())
                 .setEmail(input.getEmail())
                 .setPassword(passwordEncoder.encode(input.getPassword()));
-
         return userRepository.save(user);
     }
 

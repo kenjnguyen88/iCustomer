@@ -1,24 +1,17 @@
 package vn.esfot.platform.icustomer.entities;
 
-import jakarta.persistence.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Table;
 
-import java.io.Serial;
-import java.io.Serializable;
 import java.time.Instant;
 
-@Table(name = "permissions")
-@Entity
-public class PermissionEntity extends BaseEntity implements Serializable {
-    @Serial
-    private static final long serialVersionUID = -3450015457153933227L;
+@Table(name = "roles_resources")
+public class RoleResourceEntity {
+    @Column(name = "role_id", nullable = false)
+    private Long roleId;
+    @Column(name = "resource_id", nullable = false)
+    private Long resourceId;
 
-    @Id
-    @Column(name = "id")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
-
-    @Column(name = "name", nullable = false)
-    private String name;
     @Column(name = "created_by")
     private String createdBy;
 
@@ -31,17 +24,21 @@ public class PermissionEntity extends BaseEntity implements Serializable {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    public Long getId() {
-        return id;
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
     }
 
 
-    public String getName() {
-        return name;
+    public Long getResourceId() {
+        return resourceId;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setResourceId(Long resourceId) {
+        this.resourceId = resourceId;
     }
 
     public String getCreatedBy() {
@@ -74,17 +71,5 @@ public class PermissionEntity extends BaseEntity implements Serializable {
 
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    @Override
-    public void createdAt() {
-        this.createdAt = Instant.now();
-        this.createdBy = "sys";
-    }
-
-    @Override
-    public void updatedAt() {
-        this.updatedAt = Instant.now();
-        this.updatedBy = "sys";
     }
 }

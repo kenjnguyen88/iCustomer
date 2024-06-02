@@ -12,7 +12,7 @@ import java.util.List;
 
 @Table(name = "customers")
 @Entity
-public class CustomerEntity implements UserDetails {
+public class CustomerEntity extends BaseEntity implements UserDetails {
     @Serial
     private static final long serialVersionUID = 6833921540428414446L;
     @Id
@@ -41,6 +41,9 @@ public class CustomerEntity implements UserDetails {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+    public CustomerEntity() {
+        this.createdAt();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -150,6 +153,18 @@ public class CustomerEntity implements UserDetails {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
+    }
+
+    @Override
+    public void createdAt() {
+        this.createdAt = Instant.now();
+        this.createdBy = "sys";
+    }
+
+    @Override
+    public void updatedAt() {
+        this.updatedAt = Instant.now();
+        this.updatedBy = "sys";
     }
 }
 

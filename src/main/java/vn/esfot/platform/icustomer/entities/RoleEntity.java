@@ -5,9 +5,9 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 import java.time.Instant;
 
-@Table(name = "Roles")
+@Table(name = "roles")
 @Entity
-public class RoleEntity implements Serializable {
+public class RoleEntity extends BaseEntity implements Serializable {
 
     @Id
     @Column(name = "id")
@@ -66,5 +66,17 @@ public class RoleEntity implements Serializable {
 
     public void setUpdatedAt(Instant updatedAt) {
         this.updatedAt = updatedAt;
+    }
+
+    @Override
+    public void createdAt() {
+        this.createdAt = Instant.now();
+        this.createdBy = "sys";
+    }
+
+    @Override
+    public void updatedAt() {
+        this.updatedAt = Instant.now();
+        this.updatedBy = "sys";
     }
 }

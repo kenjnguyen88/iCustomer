@@ -63,6 +63,20 @@ CREATE TABLE `permissions` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- esoft_customer.resources definition
+CREATE TABLE `resources` (
+  `id` bigint NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `url` varchar(2550) NOT NULL,
+  `created_at` datetime(6) DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+
 CREATE TABLE `customers_roles` (
   `customer_id` bigint NOT NULL,
   `role_id` bigint NOT NULL,
@@ -87,4 +101,19 @@ CREATE TABLE `roles_permissions` (
   KEY `role_fk_idx` (`role_id`),
   CONSTRAINT `role_p_fk` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`),
   CONSTRAINT `permission_fk` FOREIGN KEY (`permission_id`) REFERENCES `permissions` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- esoft_customer.roles_resources definition
+
+CREATE TABLE `roles_resources` (
+  `resource_id` bigint NOT NULL,
+  `role_id` bigint NOT NULL,
+  `created_at` datetime(6) DEFAULT NULL,
+  `created_by` varchar(255) DEFAULT NULL,
+  `updated_at` datetime(6) DEFAULT NULL,
+  `updated_by` varchar(255) DEFAULT NULL,
+  KEY `resource_fk_idx` (`resource_id`),
+  KEY `role_fk_idx` (`role_id`),
+  CONSTRAINT `resource_fk` FOREIGN KEY (`resource_id`) REFERENCES `resources` (`id`),
+  CONSTRAINT `role_resource_fk` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
