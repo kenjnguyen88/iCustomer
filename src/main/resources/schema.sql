@@ -1,5 +1,6 @@
 CREATE DATABASE `esoft_customer` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
 -- esoft_customer.customers definition
+-- esoft_customer.customers definition
 
 CREATE TABLE `customers` (
   `id` bigint NOT NULL,
@@ -66,19 +67,19 @@ CREATE TABLE `roles` (
 
 CREATE TABLE `security_tokens` (
   `id` bigint NOT NULL AUTO_INCREMENT,
-  `access_token` varchar(255) NOT NULL,
+  `access_token` varchar(2550) NOT NULL,
   `access_token_expires_at` datetime(6) NOT NULL,
   `created_at` datetime(6) DEFAULT NULL,
   `created_by` varchar(255) DEFAULT NULL,
   `user_id` varchar(255) NOT NULL,
   `issued_at` datetime(6) NOT NULL,
-  `refresh_token` varchar(255) NOT NULL,
+  `refresh_token` varchar(2550) NOT NULL,
   `refresh_token_expires_at` datetime(6) NOT NULL,
   `status` varchar(255) NOT NULL,
   `updated_at` datetime(6) DEFAULT NULL,
   `updated_by` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- esoft_customer.customers_roles definition
