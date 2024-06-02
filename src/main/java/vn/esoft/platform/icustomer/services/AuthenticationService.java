@@ -19,10 +19,7 @@ import vn.esoft.platform.icustomer.responses.LoginResponse;
 import vn.esoft.platform.icustomer.utils.CustomerUtils;
 import vn.esoft.platform.icustomer.utils.JSonUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -32,7 +29,6 @@ public class AuthenticationService {
     private final SecurityTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
-
     private final JwtService jwtService;
 
     public AuthenticationService(
@@ -65,19 +61,16 @@ public class AuthenticationService {
                 )
         );
         if (authentication.isAuthenticated()) {
+            Map<String, Object> userInfo = new HashMap<>();
             CustomerEntity customerAuthenticated = userRepository.findByEmail(input.getEmail()).orElseThrow();
-
-//            List<String> rolesName = customerAuthenticated.getRoles();
-//            List<String> permissionName = customerAuthenticated.getPermissions();
-//            List<String> resourceURLName = customerAuthenticated.getResources();
-//            log.info("roles: {}", JSonUtils.toJson(customerRoles.stream().map(CustomerRoleEntity::getRole)));
             Map<String, List<String>> scopeCustomer = customerAuthenticated.scope();
-            SecurityTokenEntity token = jwtService.generateSecurityToken(CustomerUtils.claims(customerAuthenticated, scopeCustomer), customerAuthenticated);
+            userInfo = CustomerUtils.claims(customerAuthenticated, scopeCustomer);
+            SecurityTokenEntity token = jwtService.generateSecurityToken(userInfo, customerAuthenticated);
             loginResponse = new LoginResponse()
                     .setAccessToken(token.getAccessToken())
                     .setRefreshToken(token.getRefreshToken())
-                    .setUserAttributes(CustomerUtils.claims(customerAuthenticated, scopeCustomer))
-                    .setExpiresIn(jwtService.getExpirationTime());
+                    .setExpiresIn(jwtService.getExpirationTime())
+                    .setUserInfo(userInfo);
             this.tokenRepository.save(token);
 
         } else throw new BadCredentialsException("Can not login");

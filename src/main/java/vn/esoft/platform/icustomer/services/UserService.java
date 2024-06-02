@@ -1,8 +1,8 @@
 package vn.esoft.platform.icustomer.services;
 
+import org.springframework.stereotype.Service;
 import vn.esoft.platform.icustomer.entities.CustomerEntity;
 import vn.esoft.platform.icustomer.repositories.UserRepository;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,11 +10,9 @@ import java.util.List;
 @Service
 public class UserService {
     private final UserRepository userRepository;
-
     public UserService(UserRepository userRepository) {
         this.userRepository = userRepository;
     }
-
     public List<CustomerEntity> allUsers() {
         List<CustomerEntity> users = new ArrayList<>();
 

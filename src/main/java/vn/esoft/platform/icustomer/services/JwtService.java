@@ -62,7 +62,6 @@ public class JwtService {
                 instant.plusMillis(jwtRefreshExpiration),
                 instant
         );
-
         return entity;
     }
 

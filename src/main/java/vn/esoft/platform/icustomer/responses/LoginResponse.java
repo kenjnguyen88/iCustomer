@@ -3,10 +3,10 @@ package vn.esoft.platform.icustomer.responses;
 import java.util.Map;
 
 public class LoginResponse {
-    private Map<String, Object> userAttributes;
     private String accessToken;
     private String refreshToken;
     private long expiresIn;
+    private Map<String, Object> userInfo;
 
     public String getRefreshToken() {
         return refreshToken;
@@ -35,8 +35,12 @@ public class LoginResponse {
         return this;
     }
 
-    public LoginResponse setUserAttributes(Map<String, Object> userAttributes) {
-        this.userAttributes = userAttributes;
+    public Map<String, Object> getUserInfo() {
+        return userInfo;
+    }
+
+    public LoginResponse setUserInfo(Map<String, Object> userInfo) {
+        this.userInfo = userInfo;
         return this;
     }
 
