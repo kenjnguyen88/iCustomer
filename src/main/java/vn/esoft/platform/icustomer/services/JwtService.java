@@ -10,6 +10,7 @@ import java.security.Key;
 import java.time.Instant;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -33,8 +34,10 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public String extractScope(String token) {
-        return null;
+    public Map<String, List<String>> extractScope(String token) {
+        Claims claims = extractAllClaims(token);
+        claims.get("scope");
+        return (Map<String, List<String>>) claims.get("scope");
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {

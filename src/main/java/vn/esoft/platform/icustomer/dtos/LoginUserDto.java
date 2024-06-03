@@ -1,8 +1,24 @@
 package vn.esoft.platform.icustomer.dtos;
 
+import jakarta.validation.constraints.NotBlank;
+import lombok.Getter;
+import lombok.Setter;
+
+@Getter
+@Setter
+
 public class LoginUserDto {
+
+    @NotBlank(message = "This email not blank")
     private String email;
+
+    @NotBlank(message = "This password not blank")
     private String password;
+
+    public LoginUserDto(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
 
     public String getEmail() {
         return email;

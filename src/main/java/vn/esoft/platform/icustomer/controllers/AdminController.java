@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import vn.esoft.platform.icustomer.dtos.RegisterUserDto;
 import vn.esoft.platform.icustomer.services.UserService;
 
-@RequestMapping("/admins")
+@RequestMapping("/admin")
 @RestController
 public class AdminController {
     private final UserService userService;

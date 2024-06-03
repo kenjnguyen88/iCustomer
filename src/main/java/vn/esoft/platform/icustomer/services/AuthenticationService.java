@@ -8,18 +8,17 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.esoft.platform.icustomer.dtos.LoginUserDto;
-import vn.esoft.platform.icustomer.dtos.RegisterUserDto;
 import vn.esoft.platform.icustomer.entities.CustomerEntity;
-import vn.esoft.platform.icustomer.entities.CustomerRoleEntity;
-import vn.esoft.platform.icustomer.entities.RoleEntity;
 import vn.esoft.platform.icustomer.entities.SecurityTokenEntity;
 import vn.esoft.platform.icustomer.repositories.SecurityTokenRepository;
 import vn.esoft.platform.icustomer.repositories.UserRepository;
 import vn.esoft.platform.icustomer.responses.LoginResponse;
 import vn.esoft.platform.icustomer.utils.CustomerUtils;
-import vn.esoft.platform.icustomer.utils.JSonUtils;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -32,7 +31,8 @@ public class AuthenticationService {
 
     public AuthenticationService(
             UserRepository userRepository,
-            SecurityTokenRepository tokenRepository, AuthenticationManager authenticationManager,
+            SecurityTokenRepository tokenRepository,
+            AuthenticationManager authenticationManager,
             PasswordEncoder passwordEncoder,
             JwtService jwtService) {
         this.tokenRepository = tokenRepository;
@@ -42,13 +42,6 @@ public class AuthenticationService {
         this.jwtService = jwtService;
     }
 
-    public CustomerEntity signup(RegisterUserDto input) {
-        var user = new CustomerEntity()
-                .setFullName(input.getFullName())
-                .setEmail(input.getEmail())
-                .setPassword(passwordEncoder.encode(input.getPassword()));
-        return userRepository.save(user);
-    }
 
     public LoginResponse authenticate(LoginUserDto input) {
 
@@ -76,11 +69,4 @@ public class AuthenticationService {
         return loginResponse;
     }
 
-    public List<CustomerEntity> allUsers() {
-        List<CustomerEntity> users = new ArrayList<>();
-
-        userRepository.findAll().forEach(users::add);
-
-        return users;
-    }
 }
