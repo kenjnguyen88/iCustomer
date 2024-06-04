@@ -1,15 +1,20 @@
 package vn.esoft.platform.icustomer.services;
 
 
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import vn.esoft.platform.icustomer.dtos.AuthentRequest;
@@ -31,7 +36,7 @@ import static org.mockito.Mockito.when;
 public class AuthentServiceTest {
 
     private String email = "ken.nguyen@gmail.com";
-    private String password = "kenj@12345";
+    private String password = "$2a$04$cIh/dNF8n3EANqC1DdaBLO448X4CUo91HV.xdBvyZ28sE2OMosuGG";
     private CustomerEntity customerEntity;
     private Optional<CustomerEntity> optionalCustomerEntity;
     private RoleEntity roleEntity;
@@ -141,6 +146,32 @@ public class AuthentServiceTest {
                 jwtService);
     }
 
+    @AfterEach
+    public void reset() {
+        if(userRepository instanceof Mock) {
+            Mockito.reset(userRepository);
+        } else userRepository = null;
+
+        if(tokenRepository instanceof Mock) {
+            Mockito.reset(tokenRepository);
+        } else tokenRepository = null;
+
+
+        if(authenticationManager instanceof Mock) {
+            Mockito.reset(authenticationManager);
+        } else authenticationManager = null;
+
+
+        if(passwordEncoder instanceof Mock)
+            Mockito.reset(passwordEncoder);
+        else passwordEncoder = null;
+
+        if(jwtService instanceof Mock) {
+            Mockito.reset(jwtService);
+        } else jwtService = null;
+
+    }
+
     @Test
     public void givenAuthentSuccess_thenReturnAccessToken() {
 
@@ -163,16 +194,103 @@ public class AuthentServiceTest {
     }
 
     @Test
-    public void givenUserNameIsEmpty_thenReturnException() {
+    public void givenUserNameIsEmpty_thenReturnIllegalArgumentException() {
 
-        AuthentResponse response = null;
         AuthentRequest request = new AuthentRequest("", password);
         Assertions.assertThrows(IllegalArgumentException.class, new Executable() {
             @Override
             public void execute() throws Throwable {
                 service.authenticate(request);
             }
-        });
+        }, "email cannot empty");
     }
+
+    @Test
+    public void givenPasswordIsEmpty_thenReturnIllegalArgumentException() {
+
+        AuthentRequest request = new AuthentRequest(email, null);
+        Assertions.assertThrows(IllegalArgumentException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                service.authenticate(request);
+            }
+        }, "password cannot empty");
+    }
+
+//    @Test
+//    public void givenPasswordIsNotCorrect_thenReturnIllegalArgumentException() {
+//
+//        AuthentRequest request = new AuthentRequest(email, "isNotCorrectPassword");
+//        if(authenticationManager instanceof Mock) {
+//            Mockito.reset(authenticationManager);
+//        } else authenticationManager = null;
+//        this.authenticationManager = new AuthenticationManager() {
+//            @Override
+//            public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+//                return new Authentication() {
+//                    @Override
+//                    public Collection<? extends GrantedAuthority> getAuthorities() {
+//                        return null;
+//                    }
+//
+//                    @Override
+//                    public Object getCredentials() {
+//                        return password;
+//                    }
+//
+//                    @Override
+//                    public Object getDetails() {
+//                        return null;
+//                    }
+//
+//                    @Override
+//                    public Object getPrincipal() {
+//                        return email;
+//                    }
+//
+//                    @Override
+//                    public boolean isAuthenticated() {
+//                        return false;
+//                    }
+//
+//                    @Override
+//                    public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+//
+//                    }
+//
+//                    @Override
+//                    public String getName() {
+//                        return email;
+//                    }
+//                };
+//            }
+//        };
+//        if(passwordEncoder instanceof Mock) {
+//            Mockito.reset(passwordEncoder);
+//        } else passwordEncoder = null;
+//        this.passwordEncoder = new PasswordEncoder() {
+//            @Override
+//            public String encode(CharSequence rawPassword) {
+//                return "isNotCorrectPassword";
+//            }
+//
+//            @Override
+//            public boolean matches(CharSequence rawPassword, String encodedPassword) {
+//                return false;
+//            }
+//        };
+//        this.service = new AuthentService(
+//                userRepository,
+//                tokenRepository,
+//                authenticationManager,
+//                passwordEncoder,
+//                jwtService);
+//        Assertions.assertThrows(BadCredentialsException.class, new Executable() {
+//            @Override
+//            public void execute() throws Throwable {
+//                service.authenticate(request);
+//            }
+//        }, "username or password not correct!");
+//    }
 
 }
