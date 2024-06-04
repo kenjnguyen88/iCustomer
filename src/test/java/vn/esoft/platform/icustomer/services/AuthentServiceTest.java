@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -166,8 +167,12 @@ public class AuthentServiceTest {
 
         AuthentResponse response = null;
         AuthentRequest request = new AuthentRequest("", password);
-        Assertions.assertThrowsExactly(IllegalArgumentException.class, service.authenticate(request));
-        Assertions.assertNotNull(response.getAccessToken());
+        Assertions.assertThrows(IllegalArgumentException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                service.authenticate(request);
+            }
+        });
     }
 
 }

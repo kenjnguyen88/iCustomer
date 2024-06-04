@@ -45,8 +45,8 @@ public class AuthentService {
 
     public AuthentResponse authenticate(AuthentRequest request) {
 
-        Assert.hasText(request.getEmail(), "Username cannot empty");
-        Assert.hasText(request.getPassword(), "Password cannot empty");
+        Assert.hasText(request.getEmail(), "email cannot empty");
+        Assert.hasText(request.getPassword(), "password cannot empty");
         AuthentResponse loginResponse = null;
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword())
