@@ -161,4 +161,13 @@ public class AuthentServiceTest {
         Assertions.assertNotNull(response.getAccessToken());
     }
 
+    @Test
+    public void givenUserNameIsEmpty_thenReturnException() {
+
+        AuthentResponse response = null;
+        AuthentRequest request = new AuthentRequest("", password);
+        Assertions.assertThrowsExactly(IllegalArgumentException.class, service.authenticate(request));
+        Assertions.assertNotNull(response.getAccessToken());
+    }
+
 }

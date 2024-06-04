@@ -7,6 +7,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.Assert;
 import vn.esoft.platform.icustomer.dtos.AuthentRequest;
 import vn.esoft.platform.icustomer.entities.CustomerEntity;
 import vn.esoft.platform.icustomer.entities.SecurityTokenEntity;
@@ -44,6 +45,8 @@ public class AuthentService {
 
     public AuthentResponse authenticate(AuthentRequest request) {
 
+        Assert.hasText(request.getEmail(), "Username cannot empty");
+        Assert.hasText(request.getPassword(), "Password cannot empty");
         AuthentResponse loginResponse = null;
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(),request.getPassword())
