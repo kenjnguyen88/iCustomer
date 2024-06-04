@@ -2,7 +2,7 @@ package vn.esoft.platform.icustomer.responses;
 
 import java.util.Map;
 
-public class LoginResponse {
+public class AuthentResponse {
     private String accessToken;
     private String refreshToken;
     private long expiresIn;
@@ -12,7 +12,7 @@ public class LoginResponse {
         return refreshToken;
     }
 
-    public LoginResponse setRefreshToken(String refreshToken) {
+    public AuthentResponse setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
         return this;
     }
@@ -21,7 +21,7 @@ public class LoginResponse {
         return accessToken;
     }
 
-    public LoginResponse setAccessToken(String accessToken) {
+    public AuthentResponse setAccessToken(String accessToken) {
         this.accessToken = accessToken;
         return this;
     }
@@ -30,7 +30,7 @@ public class LoginResponse {
         return expiresIn;
     }
 
-    public LoginResponse setExpiresIn(long expiresIn) {
+    public AuthentResponse setExpiresIn(long expiresIn) {
         this.expiresIn = expiresIn;
         return this;
     }
@@ -39,7 +39,7 @@ public class LoginResponse {
         return userInfo;
     }
 
-    public LoginResponse setUserInfo(Map<String, Object> userInfo) {
+    public AuthentResponse setUserInfo(Map<String, Object> userInfo) {
         this.userInfo = userInfo;
         return this;
     }

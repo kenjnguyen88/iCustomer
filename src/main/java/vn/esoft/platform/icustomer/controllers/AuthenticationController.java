@@ -6,24 +6,24 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vn.esoft.platform.icustomer.dtos.LoginUserDto;
-import vn.esoft.platform.icustomer.responses.LoginResponse;
-import vn.esoft.platform.icustomer.services.AuthenticationService;
+import vn.esoft.platform.icustomer.dtos.AuthentRequest;
+import vn.esoft.platform.icustomer.responses.AuthentResponse;
+import vn.esoft.platform.icustomer.services.AuthentService;
 
-@RequestMapping("/auth")
+@RequestMapping("/auth/v1")
 @RestController
 public class AuthenticationController {
-    private final AuthenticationService authenticationService;
+    private final AuthentService authenticationService;
 
-    public AuthenticationController(AuthenticationService authenticationService) {
+    public AuthenticationController(AuthentService authenticationService) {
         this.authenticationService = authenticationService;
     }
 
 
     @PostMapping("/login")
     @PermitAll()
-    public ResponseEntity<LoginResponse> authenticate(@RequestBody LoginUserDto loginUserDto) {
-        LoginResponse response = authenticationService.authenticate(loginUserDto);
+    public ResponseEntity<AuthentResponse> authenticate(@RequestBody AuthentRequest loginUserDto) {
+        AuthentResponse response = authenticationService.authenticate(loginUserDto);
         return ResponseEntity.ok(response);
     }
 }

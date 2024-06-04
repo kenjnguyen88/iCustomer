@@ -1,7 +1,13 @@
 package vn.esoft.platform.icustomer.dtos;
 
-public class RegisterUserDto {
+import jakarta.validation.constraints.NotBlank;
+
+public class RegisterRequest {
+
+    @NotBlank
     private String email;
+
+    @NotBlank
     private String password;
     private String fullName;
 
@@ -9,7 +15,7 @@ public class RegisterUserDto {
         return email;
     }
 
-    public RegisterUserDto setEmail(String email) {
+    public RegisterRequest setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -18,7 +24,7 @@ public class RegisterUserDto {
         return password;
     }
 
-    public RegisterUserDto setPassword(String password) {
+    public RegisterRequest setPassword(String password) {
         this.password = password;
         return this;
     }
@@ -27,7 +33,7 @@ public class RegisterUserDto {
         return fullName;
     }
 
-    public RegisterUserDto setFullName(String fullName) {
+    public RegisterRequest setFullName(String fullName) {
         this.fullName = fullName;
         return this;
     }

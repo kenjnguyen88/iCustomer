@@ -1,6 +1,20 @@
 SELECT * from customers_roles cr ;
 SELECT * from customers c ;
 
+-------------------- customers -----------------------
+INSERT INTO esoft_customer.customers
+(created_at, created_by, email, full_name, password, updated_at, updated_by)
+VALUES('2024-06-02 08:52:29.529477', 'sys', 'cms_admin@gmail.com', 'super_admin', '$2a$10$tm9D3fZdvct9Q9n9CsCjbuKnkQjlU00uEmsrh7XQwRp5EZiSs45HC', NULL, NULL);
+INSERT INTO esoft_customer.customers
+(created_at, created_by, email, full_name, password, updated_at, updated_by)
+VALUES('2024-06-02 08:52:43.550251', 'sys', 'ken.nguyen@gmail.com', 'admin', '$2a$10$jJ.S9e/MmZpWwrokJrdyS.mQDIjJgy60wzrx0Pun4oxTL7RCBBGNu', NULL, NULL);
+INSERT INTO esoft_customer.customers
+(created_at, created_by, email, full_name, password, updated_at, updated_by)
+VALUES('2024-06-02 08:52:58.954784', 'sys', 'chi.nguyen@gmail.com', 'Thuy Chi', '$2a$10$FKrzptuPx62yDp2nUsXCGOZXTRtnFS0Q31/Snnk9jHUHy1IZO0zA.', NULL, NULL);
+INSERT INTO esoft_customer.customers
+(created_at, created_by, email, full_name, password, updated_at, updated_by)
+VALUES('2024-06-02 08:53:07.240301', 'sys', 'an.nguyen@gmail.com', 'Hoai An', '$2a$10$u03TUzY.p6IAfy9zLDH7o.9DQq9HW.S5b4lgqz0od4kyUtQfleWay', NULL, NULL);
+
 -- roles
 -------------------- roles -----------------------
 

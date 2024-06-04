@@ -32,7 +32,6 @@ public class SecurityTokenEntity extends BaseEntity implements Serializable {
     @Column(name = "access_token_expires_at", nullable = false)
     private Instant accessTokenExpiresAt;
 
-
     @Column(name = "refresh_token_expires_at", nullable = false)
     private Instant refreshTokenExpiresAt;
 

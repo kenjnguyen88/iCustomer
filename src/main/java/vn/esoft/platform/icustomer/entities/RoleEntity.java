@@ -102,6 +102,14 @@ public class RoleEntity extends BaseEntity implements Serializable {
         this.roleResources = roleResources;
     }
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     @Override
     public void createdAt() {
         this.createdAt = Instant.now();

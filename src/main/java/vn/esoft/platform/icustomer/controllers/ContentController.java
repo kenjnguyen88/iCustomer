@@ -10,7 +10,7 @@ import vn.esoft.platform.icustomer.services.UserService;
 
 import java.util.List;
 
-@RequestMapping("/content")
+@RequestMapping("/content/v1")
 @RestController
 public class ContentController {
     private final UserService userService;

@@ -97,4 +97,5 @@ public class CustomerRoleEntity {
     public void setcRoleInstance(RoleEntity cRoleInstance) {
         this.cRoleInstance = cRoleInstance;
     }
+
 }

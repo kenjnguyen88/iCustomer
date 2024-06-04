@@ -51,9 +51,9 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             final String jwt = authHeader.substring(7);
             final String userEmail = jwtService.extractUsername(jwt);
             final Map<String, List<String>> scope = jwtService.extractScope(jwt);
-            if (!checkResourcePermission(request, scope)) {
-                throw new AccessDeniedException("Not permission to access the resource");
-            }
+//            if (!checkResourcePermission(request, scope)) {
+//                throw new AccessDeniedException("Not permission to access the resource");
+//            }
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
             if (userEmail != null && authentication == null) {
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(userEmail);
@@ -83,7 +83,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         String orgFullPath = request.getRequestURL().toString();
         String orgMethod = request.getMethod();
         if (!permissions.contains(orgMethod)) return false;
-        if(!checkURI(orgURI, resourceName)) return false;
+        if(checkURI(orgURI, resourceName)) return true;
         return rs;
     }
     private boolean checkURL(String orgFullPath, List<String> urlResources) {

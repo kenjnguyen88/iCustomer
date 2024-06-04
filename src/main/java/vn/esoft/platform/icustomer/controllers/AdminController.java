@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import vn.esoft.platform.icustomer.dtos.RegisterUserDto;
+import vn.esoft.platform.icustomer.dtos.RegisterRequest;
 import vn.esoft.platform.icustomer.services.UserService;
 
-@RequestMapping("/admin")
+@RequestMapping("/admin/v1")
 @RestController
 public class AdminController {
     private final UserService userService;
@@ -21,7 +21,7 @@ public class AdminController {
 
     @PostMapping
     @PreAuthorize("hasRole('SUPER_ADMIN')")
-    public ResponseEntity<String> createAdministrator(@RequestBody RegisterUserDto registerUserDto) {
+    public ResponseEntity<String> createAdministrator(@RequestBody RegisterRequest registerUserDto) {
         return ResponseEntity.ok("success");
     }
 }

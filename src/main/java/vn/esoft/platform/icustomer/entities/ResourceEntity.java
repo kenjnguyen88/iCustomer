@@ -90,7 +90,13 @@ public class ResourceEntity extends BaseEntity implements Serializable {
         this.url = url;
     }
 
+    public Long getId() {
+        return id;
+    }
 
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     @Override
     public void createdAt() {

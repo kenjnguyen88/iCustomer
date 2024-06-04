@@ -228,6 +228,7 @@ public class CustomerEntity extends BaseEntity implements UserDetails {
     }
 
     public Set<CustomerRoleEntity> getCustomerRoles() {
+
         return customerRoles;
     }
 

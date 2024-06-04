@@ -7,7 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 
-public class LoginUserDto {
+public class AuthentRequest {
 
     @NotBlank(message = "This email not blank")
     private String email;
@@ -15,7 +15,7 @@ public class LoginUserDto {
     @NotBlank(message = "This password not blank")
     private String password;
 
-    public LoginUserDto(String email, String password) {
+    public AuthentRequest(String email, String password) {
         this.email = email;
         this.password = password;
     }
@@ -24,7 +24,7 @@ public class LoginUserDto {
         return email;
     }
 
-    public LoginUserDto setEmail(String email) {
+    public AuthentRequest setEmail(String email) {
         this.email = email;
         return this;
     }
@@ -33,7 +33,7 @@ public class LoginUserDto {
         return password;
     }
 
-    public LoginUserDto setPassword(String password) {
+    public AuthentRequest setPassword(String password) {
         this.password = password;
         return this;
     }
