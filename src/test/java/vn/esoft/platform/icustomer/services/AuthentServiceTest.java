@@ -10,12 +10,15 @@ import org.junit.jupiter.api.function.Executable;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.mockito.junit.jupiter.MockitoSettings;
+import org.mockito.quality.Strictness;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import vn.esoft.platform.icustomer.dtos.AuthentRequest;
 import vn.esoft.platform.icustomer.entities.*;
@@ -33,10 +36,11 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
+@MockitoSettings(strictness = Strictness.LENIENT)
 public class AuthentServiceTest {
 
     private String email = "ken.nguyen@gmail.com";
-    private String password = "$2a$04$cIh/dNF8n3EANqC1DdaBLO448X4CUo91HV.xdBvyZ28sE2OMosuGG";
+    private String password = "$2a$12$mBxXL61jaYTxBM.KoxhZ8eCo/cquppLl/L8M4gjmKPpNL6afuFHUG";
     private CustomerEntity customerEntity;
     private Optional<CustomerEntity> optionalCustomerEntity;
     private RoleEntity roleEntity;
@@ -101,6 +105,7 @@ public class AuthentServiceTest {
         roleEntity.setCustomerRoles(Set.of(customerRoleEntity));
         roleEntity.setRolePermissions(Set.of(rolePermissionEntity));
         roleEntity.setRoleResources(Set.of(roleResourceEntity));
+
         when(authenticationManager.authenticate(any())).thenReturn(new Authentication() {
             @Override
             public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -217,10 +222,86 @@ public class AuthentServiceTest {
         }, "password cannot empty");
     }
 
+    @Test
+    public void givenPasswordIsNotCorrect_throwBadCredentialsException() {
+
+        AuthentRequest request = new AuthentRequest(email, "isNotCorrectPassword");
+        if(authenticationManager instanceof Mock) {
+            Mockito.reset(authenticationManager);
+        } else authenticationManager = null;
+        this.authenticationManager = new AuthenticationManager() {
+            @Override
+            public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+                return new Authentication() {
+                    @Override
+                    public Collection<? extends GrantedAuthority> getAuthorities() {
+                        return null;
+                    }
+
+                    @Override
+                    public Object getCredentials() {
+                        return password;
+                    }
+
+                    @Override
+                    public Object getDetails() {
+                        return null;
+                    }
+
+                    @Override
+                    public Object getPrincipal() {
+                        return email;
+                    }
+
+                    @Override
+                    public boolean isAuthenticated() {
+                        return false;
+                    }
+
+                    @Override
+                    public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+
+                    }
+
+                    @Override
+                    public String getName() {
+                        return email;
+                    }
+                };
+            }
+        };
+        if(passwordEncoder instanceof Mock) {
+            Mockito.reset(passwordEncoder);
+        } else passwordEncoder = null;
+        this.passwordEncoder = new PasswordEncoder() {
+            @Override
+            public String encode(CharSequence rawPassword) {
+                return "isNotCorrectPassword";
+            }
+
+            @Override
+            public boolean matches(CharSequence rawPassword, String encodedPassword) {
+                return false;
+            }
+        };
+        this.service = new AuthentService(
+                userRepository,
+                tokenRepository,
+                authenticationManager,
+                passwordEncoder,
+                jwtService);
+        Assertions.assertThrows(BadCredentialsException.class, new Executable() {
+            @Override
+            public void execute() throws Throwable {
+                service.authenticate(request);
+            }
+        }, "username or password not correct!");
+    }
+
 //    @Test
-//    public void givenPasswordIsNotCorrect_thenReturnIllegalArgumentException() {
+//    public void givenPasswordCorrect_thenReturnSuccess() {
 //
-//        AuthentRequest request = new AuthentRequest(email, "isNotCorrectPassword");
+//        AuthentRequest request = new AuthentRequest(email, "kenj@12345");
 //        if(authenticationManager instanceof Mock) {
 //            Mockito.reset(authenticationManager);
 //        } else authenticationManager = null;
@@ -250,7 +331,7 @@ public class AuthentServiceTest {
 //
 //                    @Override
 //                    public boolean isAuthenticated() {
-//                        return false;
+//                        return true;
 //                    }
 //
 //                    @Override
@@ -268,29 +349,15 @@ public class AuthentServiceTest {
 //        if(passwordEncoder instanceof Mock) {
 //            Mockito.reset(passwordEncoder);
 //        } else passwordEncoder = null;
-//        this.passwordEncoder = new PasswordEncoder() {
-//            @Override
-//            public String encode(CharSequence rawPassword) {
-//                return "isNotCorrectPassword";
-//            }
-//
-//            @Override
-//            public boolean matches(CharSequence rawPassword, String encodedPassword) {
-//                return false;
-//            }
-//        };
+//        this.passwordEncoder = new BCryptPasswordEncoder();
 //        this.service = new AuthentService(
 //                userRepository,
 //                tokenRepository,
 //                authenticationManager,
 //                passwordEncoder,
 //                jwtService);
-//        Assertions.assertThrows(BadCredentialsException.class, new Executable() {
-//            @Override
-//            public void execute() throws Throwable {
-//                service.authenticate(request);
-//            }
-//        }, "username or password not correct!");
+//        AuthentResponse response = service.authenticate(request);
+//        Assertions.assertNotNull(response.getAccessToken());
 //    }
 
 }

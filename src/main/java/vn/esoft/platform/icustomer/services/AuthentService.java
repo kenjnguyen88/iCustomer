@@ -53,7 +53,7 @@ public class AuthentService {
         );
         if (authentication.isAuthenticated()) {
             Map<String, Object> userInfo = new HashMap<>();
-            CustomerEntity customerAuthenticated = userRepository.findByEmail(request.getEmail()).orElseThrow();
+            CustomerEntity customerAuthenticated = userRepository.findByEmail(request.getEmail()).get();
             Map<String, List<String>> scopeCustomer = customerAuthenticated.scope();
             userInfo = CustomerUtils.claims(customerAuthenticated, scopeCustomer);
             SecurityTokenEntity token = jwtService.generateSecurityToken(userInfo, customerAuthenticated);
