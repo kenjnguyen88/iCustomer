@@ -9,19 +9,18 @@ import java.time.Instant;
 @Getter
 @Setter
 @Entity
-@Table(name = "roles_permissions")
-public class RolePermissionEntity {
+@Table(name = "permissions_resources")
+public class PermissionResourceEntity extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)
     private Long id;
 
-    @JoinColumn(name = "role_id")
-    private Long roleId;
-
-    @JoinColumn(name = "permission_id")
+    @Column(name = "permission_id", nullable = false)
     private Long permissionId;
+    @Column(name = "resource_id", nullable = false)
+    private Long resourceId;
 
     @Column(name = "created_by")
     private String createdBy;
@@ -35,4 +34,16 @@ public class RolePermissionEntity {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+
+    @Override
+    public void createdAt() {
+        this.createdAt = Instant.now();
+        this.createdBy = "sys";
+    }
+
+    @Override
+    public void updatedAt() {
+        this.updatedAt = Instant.now();
+        this.updatedBy = "sys";
+    }
 }

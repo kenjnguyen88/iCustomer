@@ -54,15 +54,14 @@ public class AuthentService {
         if (authentication.isAuthenticated()) {
             Map<String, Object> userInfo = new HashMap<>();
             CustomerEntity customerAuthenticated = userRepository.findByEmail(request.getEmail()).get();
-            Map<String, List<String>> scopeCustomer = customerAuthenticated.scope();
-            userInfo = CustomerUtils.claims(customerAuthenticated, scopeCustomer);
-            SecurityTokenEntity token = jwtService.generateSecurityToken(userInfo, customerAuthenticated);
+//            Map<String, List<String>> scopeCustomer = customerAuthenticated.scope();
+//            userInfo = CustomerUtils.claims(customerAuthenticated, scopeCustomer);
+//            String token = jwtService.generateToken(userInfo, customerAuthenticated);
             loginResponse = new AuthentResponse()
-                    .setAccessToken(token.getAccessToken())
-                    .setRefreshToken(token.getRefreshToken())
+                    .setAccessToken(jwtService.generateToken(userInfo, customerAuthenticated))
+                    .setRefreshToken(jwtService.generateRefreshToken(userInfo, customerAuthenticated))
                     .setExpiresIn(jwtService.getExpirationTime())
                     .setUserInfo(userInfo);
-            this.tokenRepository.save(token);
 
         } else throw new BadCredentialsException("username or password not correct!");
         return loginResponse;

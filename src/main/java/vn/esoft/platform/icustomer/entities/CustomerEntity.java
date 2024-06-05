@@ -3,12 +3,12 @@ package vn.esoft.platform.icustomer.entities;
 
 import jakarta.persistence.*;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.time.Instant;
-import java.util.*;
+import java.util.Collection;
+import java.util.List;
 
 @Table(name = "customers")
 @Entity
@@ -20,8 +20,6 @@ public class CustomerEntity extends BaseEntity implements UserDetails {
     @Column(nullable = false)
     private Long id;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "customerInstance")
-    private Set<CustomerRoleEntity> customerRoles;
 
     @Column(nullable = false)
     private String fullName;
@@ -44,82 +42,13 @@ public class CustomerEntity extends BaseEntity implements UserDetails {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    public Map<String, List<String>> scope() {
-        Map<String, List<String>> scope = new HashMap<>();
-        List<RoleEntity> roleEntities = this.getCustomerRoles().stream().map(CustomerRoleEntity::getRole).toList();
-        scope.put("roles", roleEntities.stream().map(e -> e.getName()).toList());
-
-        List<String> permission = new ArrayList<>();
-        List<String> urlResources = new ArrayList<>();
-        List<String> nameResources = new ArrayList<>();
-        for (RoleEntity roleEntity : roleEntities) {
-            Set<RolePermissionEntity> rolePermissionEntities = roleEntity.getRolePermissions();
-            for (RolePermissionEntity rolePermissionEntity : rolePermissionEntities) {
-                permission.add(rolePermissionEntity.getPermission().getName());
-            }
-            Set<RoleResourceEntity> roleResources = roleEntity.getRoleResources();
-            for (RoleResourceEntity roleResourceEntity : roleResources) {
-                urlResources.add(roleResourceEntity.getResource().getUrl());
-                nameResources.add(roleResourceEntity.getResource().getName());
-            }
-        }
-        if (permission.size() != 0) {
-            scope.put("permissions", permission);
-        }
-        if (urlResources.size() != 0) {
-            scope.put("urlResources", urlResources);
-            scope.put("nameResources", nameResources);
-        }
-        return scope;
-    }
-
     public CustomerEntity() {
         this.createdAt();
     }
 
-    public List<String> getRoles() {
-        List<RoleEntity> roleEntities = this.getCustomerRoles().stream().map(CustomerRoleEntity::getRole).toList();
-        return roleEntities.stream().map(e -> e.getName()).toList();
-    }
-
-    public List<String> getPermissions() {
-        List<String> permission = new ArrayList<>();
-        List<RoleEntity> roleEntities = this.getCustomerRoles().stream().map(customerRoleEntity -> customerRoleEntity.getcRoleInstance()).toList();
-        for (RoleEntity roleEntity : roleEntities) {
-            Set<RolePermissionEntity> rolePermissionEntities = roleEntity.getRolePermissions();
-            for (RolePermissionEntity rolePermissionEntity : rolePermissionEntities) {
-                permission.add(rolePermissionEntity.getPermission().getName());
-            }
-        }
-        return permission;
-    }
-
-    public List<String> getResources() {
-        List<String> urlResources = new ArrayList<>();
-        List<RoleEntity> roleEntities = this.getCustomerRoles().stream().map(customerRoleEntity -> customerRoleEntity.getcRoleInstance()).toList();
-        for (RoleEntity roleEntity : roleEntities) {
-            Set<RoleResourceEntity> roleResources = roleEntity.getRoleResources();
-            for (RoleResourceEntity roleResourceEntity : roleResources) {
-                urlResources.add(roleResourceEntity.getResource().getUrl());
-            }
-        }
-        return urlResources;
-    }
-
-//    @Override
-//    public Collection<? extends GrantedAuthority> getAuthorities() {
-//        return List.of();
-//    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-
-        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
-        this.getRoles().forEach(e->{
-            SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + e.toString());
-            authorityList.add(authority);
-        });
-        return authorityList;
+        return List.of();
     }
 
     public String getPassword() {
@@ -225,15 +154,6 @@ public class CustomerEntity extends BaseEntity implements UserDetails {
                 ", createdAt=" + createdAt +
                 ", updatedAt=" + updatedAt +
                 '}';
-    }
-
-    public Set<CustomerRoleEntity> getCustomerRoles() {
-
-        return customerRoles;
-    }
-
-    public void setCustomerRoles(Set<CustomerRoleEntity> customerRoles) {
-        this.customerRoles = customerRoles;
     }
 
     @Override
