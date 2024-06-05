@@ -14,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoSettings;
 import org.mockito.quality.Strictness;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.ProviderManager;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
@@ -299,65 +298,96 @@ public class AuthentServiceTest {
     }
 
 //    @Test
-//    public void givenPasswordCorrect_thenReturnSuccess() {
-//
-//        AuthentRequest request = new AuthentRequest(email, "kenj@12345");
-//        if(authenticationManager instanceof Mock) {
-//            Mockito.reset(authenticationManager);
-//        } else authenticationManager = null;
-//        this.authenticationManager = new AuthenticationManager() {
-//            @Override
-//            public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-//                return new Authentication() {
-//                    @Override
-//                    public Collection<? extends GrantedAuthority> getAuthorities() {
-//                        return null;
-//                    }
-//
-//                    @Override
-//                    public Object getCredentials() {
-//                        return password;
-//                    }
-//
-//                    @Override
-//                    public Object getDetails() {
-//                        return null;
-//                    }
-//
-//                    @Override
-//                    public Object getPrincipal() {
-//                        return email;
-//                    }
-//
-//                    @Override
-//                    public boolean isAuthenticated() {
-//                        return true;
-//                    }
-//
-//                    @Override
-//                    public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
-//
-//                    }
-//
-//                    @Override
-//                    public String getName() {
-//                        return email;
-//                    }
-//                };
-//            }
-//        };
-//        if(passwordEncoder instanceof Mock) {
-//            Mockito.reset(passwordEncoder);
-//        } else passwordEncoder = null;
-//        this.passwordEncoder = new BCryptPasswordEncoder();
-//        this.service = new AuthentService(
-//                userRepository,
-//                tokenRepository,
-//                authenticationManager,
-//                passwordEncoder,
-//                jwtService);
-//        AuthentResponse response = service.authenticate(request);
+//    public void givenPermissionDeny_throwAccessDenyException() {
+//        SecurityTokenEntity securityTokenEntity = new SecurityTokenEntity(
+//                customerEntity.getId().toString(),
+//                "eyJhbGciOiJIUzI1NiJ9.eyJzY29wZSI6eyJ1cmxSZXNvdXJjZXMiOlsiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2N1c3RvbWVyLyoiXSwicGVybWlzc2lvbnMiOlsiUE9TVCIsIkdFVCIsIlBVVCJdLCJyb2xlcyI6WyJBRE1JTiJdLCJuYW1lUmVzb3VyY2VzIjpbImN1c3RvbWVyIl19LCJjdXN0b21lcklkIjoyLCJmdWxsTmFtZSI6ImFkbWluIiwiZW1haWwiOiJrZW4ubmd1eWVuQGdtYWlsLmNvbSIsInN1YiI6Imtlbi5uZ3V5ZW5AZ21haWwuY29tIiwiaWF0IjoxNzE3NTAwNTA1LCJleHAiOjE3MTc2NDQ1MDV9.0WiUD_W_4_lV9flK4LPbYcm8E4ovtNxjb3bflRk9YbA",
+//                "eyJhbGciOiJIUzI1NiJ9.eyJzY29wZSI6eyJ1cmxSZXNvdXJjZXMiOlsiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2N1c3RvbWVyLyoiXSwicGVybWlzc2lvbnMiOlsiUE9TVCIsIkdFVCIsIlBVVCJdLCJyb2xlcyI6WyJBRE1JTiJdLCJuYW1lUmVzb3VyY2VzIjpbImN1c3RvbWVyIl19LCJjdXN0b21lcklkIjoyLCJmdWxsTmFtZSI6ImFkbWluIiwiZW1haWwiOiJrZW4ubmd1eWVuQGdtYWlsLmNvbSIsInN1YiI6Imtlbi5uZ3V5ZW5AZ21haWwuY29tIiwiaWF0IjoxNzE3NTAwNTA1LCJleHAiOjE3MTk2NjA1MDV9.orcXToYJQ4AD_770SfT-eGlfPV4osy_b2XKDwPHBEvY",
+//                "enable",
+//                Instant.now(),
+//                Instant.now(),
+//                Instant.now()
+//        );
+//        AuthentResponse response = null;
+//        when(userRepository.findByEmail(any(String.class))).thenReturn(optionalCustomerEntity);
+//        when(jwtService.generateSecurityToken(any(), any())).thenReturn(securityTokenEntity);
+//        AuthentRequest request = new AuthentRequest(email, password);
+//        response = service.authenticate(request);
+//        Assertions.assertNotNull(response);
 //        Assertions.assertNotNull(response.getAccessToken());
 //    }
+
+    @Test
+    public void givenPasswordCorrect_thenReturnSuccess() {
+
+        AuthentRequest request = new AuthentRequest(email, "kenj@12345");
+        SecurityTokenEntity securityTokenEntity = new SecurityTokenEntity(
+                customerEntity.getId().toString(),
+                "eyJhbGciOiJIUzI1NiJ9.eyJzY29wZSI6eyJ1cmxSZXNvdXJjZXMiOlsiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2N1c3RvbWVyLyoiXSwicGVybWlzc2lvbnMiOlsiUE9TVCIsIkdFVCIsIlBVVCJdLCJyb2xlcyI6WyJBRE1JTiJdLCJuYW1lUmVzb3VyY2VzIjpbImN1c3RvbWVyIl19LCJjdXN0b21lcklkIjoyLCJmdWxsTmFtZSI6ImFkbWluIiwiZW1haWwiOiJrZW4ubmd1eWVuQGdtYWlsLmNvbSIsInN1YiI6Imtlbi5uZ3V5ZW5AZ21haWwuY29tIiwiaWF0IjoxNzE3NTAwNTA1LCJleHAiOjE3MTc2NDQ1MDV9.0WiUD_W_4_lV9flK4LPbYcm8E4ovtNxjb3bflRk9YbA",
+                "eyJhbGciOiJIUzI1NiJ9.eyJzY29wZSI6eyJ1cmxSZXNvdXJjZXMiOlsiaHR0cDovL2xvY2FsaG9zdDo4MDgwL2N1c3RvbWVyLyoiXSwicGVybWlzc2lvbnMiOlsiUE9TVCIsIkdFVCIsIlBVVCJdLCJyb2xlcyI6WyJBRE1JTiJdLCJuYW1lUmVzb3VyY2VzIjpbImN1c3RvbWVyIl19LCJjdXN0b21lcklkIjoyLCJmdWxsTmFtZSI6ImFkbWluIiwiZW1haWwiOiJrZW4ubmd1eWVuQGdtYWlsLmNvbSIsInN1YiI6Imtlbi5uZ3V5ZW5AZ21haWwuY29tIiwiaWF0IjoxNzE3NTAwNTA1LCJleHAiOjE3MTk2NjA1MDV9.orcXToYJQ4AD_770SfT-eGlfPV4osy_b2XKDwPHBEvY",
+                "enable",
+                Instant.now(),
+                Instant.now(),
+                Instant.now()
+        );
+        if(authenticationManager instanceof Mock) {
+            Mockito.reset(authenticationManager);
+        } else authenticationManager = null;
+        this.authenticationManager = new AuthenticationManager() {
+            @Override
+            public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+                return new Authentication() {
+                    @Override
+                    public Collection<? extends GrantedAuthority> getAuthorities() {
+                        return null;
+                    }
+
+                    @Override
+                    public Object getCredentials() {
+                        return password;
+                    }
+
+                    @Override
+                    public Object getDetails() {
+                        return null;
+                    }
+
+                    @Override
+                    public Object getPrincipal() {
+                        return email;
+                    }
+
+                    @Override
+                    public boolean isAuthenticated() {
+                        return true;
+                    }
+
+                    @Override
+                    public void setAuthenticated(boolean isAuthenticated) throws IllegalArgumentException {
+
+                    }
+
+                    @Override
+                    public String getName() {
+                        return email;
+                    }
+                };
+            }
+        };
+        if(passwordEncoder instanceof Mock) {
+            Mockito.reset(passwordEncoder);
+        } else passwordEncoder = null;
+        this.passwordEncoder = new BCryptPasswordEncoder();
+        this.service = new AuthentService(
+                userRepository,
+                tokenRepository,
+                authenticationManager,
+                passwordEncoder,
+                jwtService);
+        when(userRepository.findByEmail(any(String.class))).thenReturn(optionalCustomerEntity);
+        when(jwtService.generateSecurityToken(any(), any())).thenReturn(securityTokenEntity);
+        AuthentResponse response = service.authenticate(request);
+        Assertions.assertNotNull(response.getAccessToken());
+    }
 
 }
