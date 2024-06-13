@@ -6,27 +6,21 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.esoft.platform.icustomer.services.UserService;
 
-@RequestMapping("/content/v1")
+@RequestMapping("/customer/v1")
 @RestController
 @RequiredArgsConstructor
-public class ContentController {
+public class CustomerController {
+
     private final UserService userService;
-
-    @GetMapping()
-    @PreAuthorize("hasAnyRole('GUEST', 'EDITOR', 'ADMIN')")
-    public ResponseEntity<String> contentInfo() {
+    @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
+    public ResponseEntity<String> getAllCustomer() {
         return ResponseEntity.ok("success");
     }
 
-    @PostMapping()
-    @PreAuthorize("hasRole('GUEST')")
+    @GetMapping("/info")
+    @PreAuthorize("hasAnyRole('EDITOR', 'GUEST')")
     public ResponseEntity<String> createContent() {
-        return ResponseEntity.ok("success");
-    }
-
-    @PutMapping()
-    @PreAuthorize("hasRole('EDITOR')")
-    public ResponseEntity<String> updateContent() {
         return ResponseEntity.ok("success");
     }
 

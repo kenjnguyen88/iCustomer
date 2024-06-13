@@ -1,8 +1,19 @@
-package vn.esoft.platform.icustomer.responses;
+package vn.esoft.platform.icustomer.controllers.response;
 
+import lombok.*;
+
+import java.io.Serial;
+import java.io.Serializable;
 import java.util.Map;
 
-public class AuthentResponse {
+@Setter
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
+public class AuthenResponse implements Serializable {
+    @Serial
+    private static final long serialVersionUID = -1174901763648417586L;
     private String accessToken;
     private String refreshToken;
     private long expiresIn;
@@ -12,7 +23,7 @@ public class AuthentResponse {
         return refreshToken;
     }
 
-    public AuthentResponse setRefreshToken(String refreshToken) {
+    public AuthenResponse setRefreshToken(String refreshToken) {
         this.refreshToken = refreshToken;
         return this;
     }
@@ -21,7 +32,7 @@ public class AuthentResponse {
         return accessToken;
     }
 
-    public AuthentResponse setAccessToken(String accessToken) {
+    public AuthenResponse setAccessToken(String accessToken) {
         this.accessToken = accessToken;
         return this;
     }
@@ -30,7 +41,7 @@ public class AuthentResponse {
         return expiresIn;
     }
 
-    public AuthentResponse setExpiresIn(long expiresIn) {
+    public AuthenResponse setExpiresIn(long expiresIn) {
         this.expiresIn = expiresIn;
         return this;
     }
@@ -39,7 +50,7 @@ public class AuthentResponse {
         return userInfo;
     }
 
-    public AuthentResponse setUserInfo(Map<String, Object> userInfo) {
+    public AuthenResponse setUserInfo(Map<String, Object> userInfo) {
         this.userInfo = userInfo;
         return this;
     }

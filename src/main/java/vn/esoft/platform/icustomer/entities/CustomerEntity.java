@@ -2,6 +2,8 @@
 package vn.esoft.platform.icustomer.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -10,16 +12,19 @@ import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 
+@Getter
+@Setter
 @Table(name = "customers")
 @Entity
 public class CustomerEntity extends BaseEntity implements UserDetails {
+
     @Serial
     private static final long serialVersionUID = 6833921540428414446L;
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(nullable = false)
     private Long id;
-
 
     @Column(nullable = false)
     private String fullName;
@@ -46,13 +51,15 @@ public class CustomerEntity extends BaseEntity implements UserDetails {
         this.createdAt();
     }
 
+    public CustomerEntity(String fullName, String email, String password) {
+        this.fullName = fullName;
+        this.email = email;
+        this.password = password;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return List.of();
-    }
-
-    public String getPassword() {
-        return password;
     }
 
     @Override
@@ -80,26 +87,14 @@ public class CustomerEntity extends BaseEntity implements UserDetails {
         return true;
     }
 
-    public Long getId() {
-        return id;
-    }
-
     public CustomerEntity setId(Long id) {
         this.id = id;
         return this;
     }
 
-    public String getFullName() {
-        return fullName;
-    }
-
     public CustomerEntity setFullName(String fullName) {
         this.fullName = fullName;
         return this;
-    }
-
-    public String getEmail() {
-        return email;
     }
 
     public CustomerEntity setEmail(String email) {
@@ -112,32 +107,16 @@ public class CustomerEntity extends BaseEntity implements UserDetails {
         return this;
     }
 
-    public String getCreatedBy() {
-        return createdBy;
-    }
-
     public void setCreatedBy(String createdBy) {
         this.createdBy = createdBy;
-    }
-
-    public String getUpdatedBy() {
-        return updatedBy;
     }
 
     public void setUpdatedBy(String updatedBy) {
         this.updatedBy = updatedBy;
     }
 
-    public Instant getCreatedAt() {
-        return createdAt;
-    }
-
     public void setCreatedAt(Instant createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return updatedAt;
     }
 
     public void setUpdatedAt(Instant updatedAt) {

@@ -4,25 +4,24 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.io.Serial;
 import java.time.Instant;
 
 @Getter
 @Setter
-@Table(name = "permissions")
 @Entity
-public class PermissionEntity extends BaseEntity {
-
-    @Serial
-    private static final long serialVersionUID = -3450015457153933227L;
+@Table(name = "roles_resources")
+public class RoleResourceEntity {
 
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @JoinColumn(name = "role_id")
+    private Long roleId;
+
+    @JoinColumn(name = "resource_id")
+    private Long resourceId;
 
     @Column(name = "created_by")
     private String createdBy;
@@ -36,15 +35,14 @@ public class PermissionEntity extends BaseEntity {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    @Override
-    public void createdAt() {
-        this.createdAt = Instant.now();
-        this.createdBy = "sys";
+    private void updatedAt(){
+        this.updatedBy = "sys";
+        this.updatedAt = Instant.now();
     }
 
-    @Override
-    public void updatedAt() {
-        this.updatedAt = Instant.now();
-        this.updatedBy = "sys";
+    public RoleResourceEntity(Long roleId, Long resourceId) {
+        this.roleId = roleId;
+        this.resourceId = resourceId;
+        this.updatedAt();
     }
 }

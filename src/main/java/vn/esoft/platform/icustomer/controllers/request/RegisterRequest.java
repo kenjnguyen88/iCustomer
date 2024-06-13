@@ -1,12 +1,13 @@
-package vn.esoft.platform.icustomer.dtos;
+package vn.esoft.platform.icustomer.controllers.request;
 
 import jakarta.validation.constraints.NotBlank;
 
-public class RegisterRequest {
+import java.io.Serializable;
+
+public class RegisterRequest implements Serializable {
 
     @NotBlank
     private String email;
-
     @NotBlank
     private String password;
     private String fullName;

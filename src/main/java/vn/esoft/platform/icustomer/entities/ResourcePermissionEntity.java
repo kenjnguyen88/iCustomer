@@ -9,20 +9,21 @@ import java.time.Instant;
 
 @Getter
 @Setter
-@Table(name = "permissions")
 @Entity
-public class PermissionEntity extends BaseEntity {
+@Table(name = "resources_permissions")
+public class ResourcePermissionEntity extends BaseEntity {
 
     @Serial
-    private static final long serialVersionUID = -3450015457153933227L;
-
+    private static final long serialVersionUID = -4086307387312029967L;
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @Column(name = "permission_id", nullable = false)
+    private Long permissionId;
+    @Column(name = "resource_id", nullable = false)
+    private Long resourceId;
 
     @Column(name = "created_by")
     private String createdBy;
@@ -35,6 +36,7 @@ public class PermissionEntity extends BaseEntity {
 
     @Column(name = "updated_at")
     private Instant updatedAt;
+
 
     @Override
     public void createdAt() {

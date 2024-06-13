@@ -5,9 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.io.Serial;
-import java.io.Serializable;
 import java.time.Instant;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -17,6 +15,7 @@ public class ResourceEntity extends BaseEntity {
 
     @Serial
     private static final long serialVersionUID = 6252723691275106655L;
+
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)

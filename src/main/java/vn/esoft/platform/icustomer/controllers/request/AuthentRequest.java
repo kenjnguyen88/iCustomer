@@ -1,13 +1,18 @@
-package vn.esoft.platform.icustomer.dtos;
+package vn.esoft.platform.icustomer.controllers.request;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.io.Serial;
+import java.io.Serializable;
+
 @Getter
 @Setter
+public class AuthentRequest implements Serializable {
 
-public class AuthentRequest {
+    @Serial
+    private static final long serialVersionUID = -1605394479998784554L;
 
     @NotBlank(message = "This email not blank")
     private String email;
