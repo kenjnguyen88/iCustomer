@@ -16,20 +16,24 @@ import vn.esoft.platform.icustomer.controllers.response.RegisterResponse;
 import vn.esoft.platform.icustomer.entities.CustomerEntity;
 import vn.esoft.platform.icustomer.repositories.SecurityTokenRepository;
 import vn.esoft.platform.icustomer.repositories.UserRepository;
+import vn.esoft.platform.icustomer.utils.CustomerUtils;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Service
 @Slf4j
 @RequiredArgsConstructor
-public class AuthentService {
+public class AuthentService implements IAuthentService {
+
     private final UserRepository userRepository;
     private final SecurityTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
 
+    @Override
     public AuthenResponse authenticate(AuthentRequest request) {
 
         Assert.hasText(request.getEmail(), "email cannot empty");
@@ -49,11 +53,31 @@ public class AuthentService {
             loginResponse.setRefreshToken(jwtService.generateRefreshToken(userInfo, customerAuthenticated));
             loginResponse.setExpiresIn(jwtService.getExpirationTime());
             loginResponse.setUserInfo(userInfo);
-
         } else throw new BadCredentialsException("username or password not correct!");
         return loginResponse;
     }
 
+    @Override
+    public AuthenResponse auth(AuthentRequest request) {
+
+        AuthenResponse response = null;
+        Assert.hasText(request.getEmail(), "email cannot empty");
+        Assert.hasText(request.getPassword(), "password cannot empty");
+        Optional<CustomerEntity> optCust = userRepository.findByEmail(request.getEmail());
+        if (optCust.isPresent()) {
+
+            Map<String, Object> claims = new HashMap<>();
+            claims = CustomerUtils.claims(optCust.get(), null);
+            response = AuthenResponse.builder()
+                    .accessToken(jwtService.generateToken(claims, optCust.get()))
+                    .refreshToken(jwtService.generateToken(claims, optCust.get()))
+                    .userInfo(claims)
+                    .build();
+        }
+        return response;
+    }
+
+    @Override
     public RegisterResponse signup(RegisterRequest request) {
 
         if (userRepository.findByEmail(request.getEmail()).isPresent())
@@ -69,5 +93,11 @@ public class AuthentService {
                 .email(entity.getEmail())
                 .fullName(entity.getFullName())
                 .build();
+    }
+
+    private Object loadScope(final Long custId) {
+
+
+        return null;
     }
 }
