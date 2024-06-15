@@ -134,3 +134,34 @@ CREATE TABLE `roles_resources` (
   CONSTRAINT `FKbkcctu1knrj8m71kwyk2oswy5` FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`),
   CONSTRAINT `FKo8csnl3m4hu7d207f7nvp38qs` FOREIGN KEY (`resource_id`) REFERENCES `resources` (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
+USE esoft_authent;
+DROP PROCEDURE IF EXISTS `get_role_permissions_by_customerId` ;
+
+CREATE DEFINER = `root` @`%` PROCEDURE `esoft_authent`.`get_role_permissions_by_customerId`(
+    IN i_customer_id LONGTEXT
+ )
+BEGIN
+SELECT
+	cr.id,
+	cr.customer_id,
+	cr.role_id ,
+	r.name as role_name ,
+	p.id as permission_id ,
+	p.name as permission_name
+FROM
+	(
+	SELECT
+		*
+	FROM
+		customers_roles t
+	where
+		customer_id = i_customer_id ) cr
+left join roles r on
+	cr.role_id = r.id
+left JOIN roles_permissions rp on
+	rp.role_id = r.id
+left join permissions p on
+	rp.permission_id = p.id;
+END;

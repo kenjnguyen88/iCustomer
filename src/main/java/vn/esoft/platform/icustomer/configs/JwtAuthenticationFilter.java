@@ -5,7 +5,6 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.lang.NonNull;
-import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -50,7 +49,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         try {
             final String jwt = authHeader.substring(7);
             final String userEmail = jwtService.extractUsername(jwt);
-            final Map<String, List<String>> scope = jwtService.extractScope(jwt);
+            List<String> roles = jwtService.extractRoles(jwt);
+            List<String> permissions = jwtService.extractPermissions(jwt);
 //            if (!checkResourcePermission(request, scope)) {
 //                throw new AccessDeniedException("Not permission to access the resource");
 //            }

@@ -8,12 +8,13 @@ import java.util.Map;
 
 public class CustomerUtils {
 
-    public static Map<String, Object> claims(CustomerEntity customer, Map<String, List<String>> scope) {
+    public static Map<String, Object> claims(CustomerEntity customer, List<String> roles, List<String> permissions) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("customerId", customer.getId());
         claims.put("email", customer.getEmail());
         claims.put("fullName", customer.getFullName());
-        claims.put("scope", scope);
+        claims.put("roles", roles);
+        claims.put("permissions", permissions);
         return claims;
     }
 }

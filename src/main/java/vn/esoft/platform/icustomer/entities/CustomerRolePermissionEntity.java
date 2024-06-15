@@ -8,7 +8,7 @@ import jakarta.persistence.*;
 @Setter
 @Entity
 @NamedStoredProcedureQuery(name = "esoft_authent.get_role_permissions_by_customerId", procedureName = "get_role_permissions_by_customerId", parameters = {
-        @StoredProcedureParameter(mode = ParameterMode.IN, name = "i_customer_id", type = String.class) })
+        @StoredProcedureParameter(mode = ParameterMode.IN, name = "i_customer_id", type = Long.class) })
 public class CustomerRolePermissionEntity {
 
     @Id

@@ -1,11 +1,14 @@
 package vn.esoft.platform.icustomer.services;
 
+import com.sun.security.auth.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
@@ -14,7 +17,6 @@ import vn.esoft.platform.icustomer.controllers.request.RegisterRequest;
 import vn.esoft.platform.icustomer.controllers.response.AuthenResponse;
 import vn.esoft.platform.icustomer.controllers.response.RegisterResponse;
 import vn.esoft.platform.icustomer.entities.CustomerEntity;
-import vn.esoft.platform.icustomer.entities.CustomerRoleEntity;
 import vn.esoft.platform.icustomer.entities.CustomerRolePermissionEntity;
 import vn.esoft.platform.icustomer.repositories.CustomerRolePermissionRepository;
 import vn.esoft.platform.icustomer.repositories.CustomerRoleRepository;
@@ -22,10 +24,7 @@ import vn.esoft.platform.icustomer.repositories.SecurityTokenRepository;
 import vn.esoft.platform.icustomer.repositories.UserRepository;
 import vn.esoft.platform.icustomer.utils.CustomerUtils;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Slf4j
@@ -46,15 +45,10 @@ public class AuthentService implements IAuthentService {
         Assert.hasText(request.getEmail(), "email cannot empty");
         Assert.hasText(request.getPassword(), "password cannot empty");
         AuthenResponse loginResponse = null;
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-        );
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         if (authentication.isAuthenticated()) {
             Map<String, Object> userInfo = new HashMap<>();
             CustomerEntity customerAuthenticated = userRepository.findByEmail(request.getEmail()).get();
-//            Map<String, List<String>> scopeCustomer = customerAuthenticated.scope();
-//            userInfo = CustomerUtils.claims(customerAuthenticated, scopeCustomer);
-//            String token = jwtService.generateToken(userInfo, customerAuthenticated);
             loginResponse = new AuthenResponse();
             loginResponse.setAccessToken(jwtService.generateToken(userInfo, customerAuthenticated));
             loginResponse.setRefreshToken(jwtService.generateRefreshToken(userInfo, customerAuthenticated));
@@ -70,18 +64,28 @@ public class AuthentService implements IAuthentService {
         AuthenResponse response = null;
         Assert.hasText(request.getEmail(), "email cannot empty");
         Assert.hasText(request.getPassword(), "password cannot empty");
-        Optional<CustomerEntity> optCust = userRepository.findByEmail(request.getEmail());
-        if (optCust.isPresent()) {
-//            Optional<List<CustomerRoleEntity>> customerRoleEntitys = customerRoleRepository.findCustomerId(optCust.get().getId());
-            List<CustomerRolePermissionEntity> permissionEntities = customerRolePermissionRepository.findByCustomerId(optCust.get().getId());
-            Map<String, Object> claims = new HashMap<>();
-            claims = CustomerUtils.claims(optCust.get(), null);
-            response = AuthenResponse.builder()
-                    .accessToken(jwtService.generateToken(claims, optCust.get()))
-                    .refreshToken(jwtService.generateToken(claims, optCust.get()))
-                    .userInfo(claims)
-                    .build();
+        Optional<CustomerEntity> optCust;
+//                = userRepository.findByEmail(request.getEmail());
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+        if (authentication.isAuthenticated()) {
+            optCust = userRepository.findByEmail(request.getEmail());
+            if (optCust.isPresent()) {
+                List<CustomerRolePermissionEntity> permissionEntities = customerRolePermissionRepository.findByCustomerId(optCust.get().getId());
+
+                List<String> roles = permissionEntities.stream().map(CustomerRolePermissionEntity::getRoleName).distinct().toList();
+                Set<GrantedAuthority> authorities = new HashSet<>();
+                roles.forEach(e -> {
+                    authorities.add(new SimpleGrantedAuthority(e));
+                });
+
+                List<String> permissions = permissionEntities.stream().map(CustomerRolePermissionEntity::getPermissionName).toList();
+
+                Map<String, Object> claims = null;
+                claims = CustomerUtils.claims(optCust.get(), roles, permissions);
+                response = AuthenResponse.builder().accessToken(jwtService.generateToken(claims, optCust.get())).refreshToken(jwtService.generateToken(claims, optCust.get())).userInfo(claims).build();
+            }
         }
+
         return response;
     }
 
@@ -97,10 +101,7 @@ public class AuthentService implements IAuthentService {
         entity.setFullName(request.getFullName());
         entity = userRepository.save(entity);
 
-        return RegisterResponse.builder()
-                .email(entity.getEmail())
-                .fullName(entity.getFullName())
-                .build();
+        return RegisterResponse.builder().email(entity.getEmail()).fullName(entity.getFullName()).build();
     }
 
     private Object loadScope(final Long custId) {

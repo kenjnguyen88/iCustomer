@@ -23,6 +23,9 @@ public class JwtService {
     @Value("${security.jwt.secret-key}")
     private String secretKey;
 
+    @Value("${security.jwt.issuer:}")
+    private String issuer;
+
     @Value("${security.jwt.expiration-time}")
     private long jwtExpiration;
 
@@ -33,11 +36,16 @@ public class JwtService {
         return extractClaim(token, Claims::getSubject);
     }
 
-    public Map<String, List<String>> extractScope(String token) {
+    public List<String> extractRoles(String token) {
         Claims claims = extractAllClaims(token);
-        claims.get("scope");
-        return (Map<String, List<String>>) claims.get("scope");
+        return (List<String>) claims.get("roles");
     }
+
+    public List<String> extractPermissions(String token) {
+        Claims claims = extractAllClaims(token);
+        return (List<String>) claims.get("permissions");
+    }
+
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
         final Claims claims = extractAllClaims(token);
@@ -78,9 +86,10 @@ public class JwtService {
     private String buildToken(Map<String, Object> extraClaims, UserDetails userDetails, long expiration) {
         return Jwts
                 .builder()
+                .setIssuer(issuer)
+                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())
-                .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + (expiration * 1000)))
                 .signWith(getSignInKey(), SignatureAlgorithm.HS256)
                 .compact();
