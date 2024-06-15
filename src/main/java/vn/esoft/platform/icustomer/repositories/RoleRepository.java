@@ -5,6 +5,9 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import vn.esoft.platform.icustomer.entities.RoleEntity;
 
+import java.util.Optional;
+
 @Repository
 public interface RoleRepository extends JpaRepository<RoleEntity, Long> {
+    Optional<RoleEntity> findByName(String name);
 }

@@ -28,7 +28,9 @@ public class AdminController {
 
     @PostMapping("/user/role")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
-    public ResponseEntity<String> assignRole(@RequestBody AssignRoleRequest registerUserDto) {
+    public ResponseEntity<String> assignRole(@RequestBody AssignRoleRequest request) {
+
+        userService.assignRole(request);
         return ResponseEntity.ok("success");
     }
 }

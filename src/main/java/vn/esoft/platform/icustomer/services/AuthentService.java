@@ -14,11 +14,14 @@ import vn.esoft.platform.icustomer.controllers.request.RegisterRequest;
 import vn.esoft.platform.icustomer.controllers.response.AuthenResponse;
 import vn.esoft.platform.icustomer.controllers.response.RegisterResponse;
 import vn.esoft.platform.icustomer.entities.CustomerEntity;
+import vn.esoft.platform.icustomer.entities.CustomerRoleEntity;
+import vn.esoft.platform.icustomer.repositories.CustomerRoleRepository;
 import vn.esoft.platform.icustomer.repositories.SecurityTokenRepository;
 import vn.esoft.platform.icustomer.repositories.UserRepository;
 import vn.esoft.platform.icustomer.utils.CustomerUtils;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,6 +31,7 @@ import java.util.Optional;
 public class AuthentService implements IAuthentService {
 
     private final UserRepository userRepository;
+    private final CustomerRoleRepository customerRoleRepository;
     private final SecurityTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
@@ -65,7 +69,7 @@ public class AuthentService implements IAuthentService {
         Assert.hasText(request.getPassword(), "password cannot empty");
         Optional<CustomerEntity> optCust = userRepository.findByEmail(request.getEmail());
         if (optCust.isPresent()) {
-
+            Optional<List<CustomerRoleEntity>> customerRoleEntitys = customerRoleRepository.findCustomerId(optCust.get().getId());
             Map<String, Object> claims = new HashMap<>();
             claims = CustomerUtils.claims(optCust.get(), null);
             response = AuthenResponse.builder()

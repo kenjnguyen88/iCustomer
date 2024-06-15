@@ -1,12 +1,16 @@
 package vn.esoft.platform.icustomer.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serial;
 import java.time.Instant;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
 @Entity
@@ -48,5 +52,11 @@ public class CustomerRoleEntity extends BaseEntity {
     public void updatedAt() {
         this.updatedAt = Instant.now();
         this.updatedBy = "sys";
+    }
+
+    public CustomerRoleEntity(Long customerId, Long roleId) {
+        this.customerId = customerId;
+        this.roleId = roleId;
+        this.createdAt();
     }
 }
