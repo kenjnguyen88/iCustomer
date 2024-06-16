@@ -1,12 +1,12 @@
 package vn.esoft.platform.icustomer.controllers;
 
 import lombok.RequiredArgsConstructor;
-import vn.esoft.platform.icustomer.entities.vo.ProviderEnum;
-import vn.esoft.platform.icustomer.services.IAuthService;
-import vn.esoft.platform.icustomer.services.auth.EsoftAuthService;
-import vn.esoft.platform.icustomer.services.auth.FacebookAuthService;
-import vn.esoft.platform.icustomer.services.auth.GoogleAuthService;
-import vn.esoft.platform.icustomer.services.user.UserService;
+import vn.esoft.platform.icustomer.model.entities.vo.ProviderEnum;
+import vn.esoft.platform.icustomer.model.services.IAuthService;
+import vn.esoft.platform.icustomer.model.services.auth.EsoftAuthService;
+import vn.esoft.platform.icustomer.model.services.auth.FacebookAuthService;
+import vn.esoft.platform.icustomer.model.services.auth.GoogleAuthService;
+import vn.esoft.platform.icustomer.model.services.user.UserService;
 
 @RequiredArgsConstructor
 public abstract class BaseController {

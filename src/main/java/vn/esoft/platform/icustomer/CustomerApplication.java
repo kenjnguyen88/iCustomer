@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @SpringBootApplication
 @EnableJpaAuditing
-@EntityScan("vn.esoft.platform.icustomer.entities")
+@EntityScan("vn.esoft.platform.icustomer.model.entities")
 @EnableJpaRepositories("vn.esoft.platform.icustomer.repositories")
 public class CustomerApplication {
 	public static void main(String[] args) {

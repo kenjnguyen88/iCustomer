@@ -1,4 +1,4 @@
-package vn.esoft.platform.icustomer.entities.vo;
+package vn.esoft.platform.icustomer.model.entities.vo;
 
 import lombok.RequiredArgsConstructor;
 

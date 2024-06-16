@@ -1,6 +1,6 @@
 package vn.esoft.platform.icustomer.utils;
 
-import vn.esoft.platform.icustomer.entities.CustomerEntity;
+import vn.esoft.platform.icustomer.model.entities.CustomerEntity;
 
 import java.util.HashMap;
 import java.util.List;

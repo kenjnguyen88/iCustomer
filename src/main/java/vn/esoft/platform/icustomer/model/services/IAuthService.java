@@ -1,4 +1,4 @@
-package vn.esoft.platform.icustomer.services;
+package vn.esoft.platform.icustomer.model.services;
 
 import vn.esoft.platform.icustomer.controllers.dto.request.AuthentRequest;
 import vn.esoft.platform.icustomer.controllers.dto.response.AuthenResponse;

@@ -10,7 +10,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import vn.esoft.platform.icustomer.repositories.UserRepository;
-import vn.esoft.platform.icustomer.services.user.UserService;
+import vn.esoft.platform.icustomer.model.services.user.UserService;
 
 import java.time.temporal.ChronoUnit;
 import java.util.concurrent.ArrayBlockingQueue;

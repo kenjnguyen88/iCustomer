@@ -12,10 +12,10 @@ import vn.esoft.platform.icustomer.controllers.dto.request.AuthentRequest;
 import vn.esoft.platform.icustomer.controllers.dto.request.RegisterRequest;
 import vn.esoft.platform.icustomer.controllers.dto.response.AuthenResponse;
 import vn.esoft.platform.icustomer.controllers.dto.response.RegisterResponse;
-import vn.esoft.platform.icustomer.services.auth.EsoftAuthService;
-import vn.esoft.platform.icustomer.services.auth.FacebookAuthService;
-import vn.esoft.platform.icustomer.services.auth.GoogleAuthService;
-import vn.esoft.platform.icustomer.services.user.UserService;
+import vn.esoft.platform.icustomer.model.services.auth.EsoftAuthService;
+import vn.esoft.platform.icustomer.model.services.auth.FacebookAuthService;
+import vn.esoft.platform.icustomer.model.services.auth.GoogleAuthService;
+import vn.esoft.platform.icustomer.model.services.user.UserService;
 
 @RequestMapping("/auth/v1")
 @RestController

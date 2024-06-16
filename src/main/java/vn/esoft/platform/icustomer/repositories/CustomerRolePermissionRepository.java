@@ -5,7 +5,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.query.Procedure;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import vn.esoft.platform.icustomer.entities.CustomerRolePermissionEntity;
+import vn.esoft.platform.icustomer.model.entities.CustomerRolePermissionEntity;
 
 import java.sql.ResultSet;
 import java.util.List;

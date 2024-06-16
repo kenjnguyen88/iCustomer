@@ -1,28 +1,34 @@
-package vn.esoft.platform.icustomer.entities;
+package vn.esoft.platform.icustomer.model.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serial;
 import java.time.Instant;
 
+@NoArgsConstructor
+@AllArgsConstructor
 @Getter
 @Setter
-@Table(name = "permissions")
 @Entity
-public class PermissionEntity extends BaseEntity {
+@Table(name = "customers_roles")
+public class CustomerRoleEntity extends BaseEntity {
 
     @Serial
-    private static final long serialVersionUID = -3450015457153933227L;
-
+    private static final long serialVersionUID = -2910747967607961138L;
     @Id
-    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id", nullable = false)
     private Long id;
 
-    @Column(name = "name", nullable = false)
-    private String name;
+    @JoinColumn(name = "customer_id")
+    private Long customerId;
+
+    @JoinColumn(name = "role_id")
+    private Long roleId;
 
     @Column(name = "created_by")
     private String createdBy;
@@ -46,5 +52,11 @@ public class PermissionEntity extends BaseEntity {
     public void updatedAt() {
         this.updatedAt = Instant.now();
         this.updatedBy = "sys";
+    }
+
+    public CustomerRoleEntity(Long customerId, Long roleId) {
+        this.customerId = customerId;
+        this.roleId = roleId;
+        this.createdAt();
     }
 }

@@ -1,4 +1,4 @@
-package vn.esoft.platform.icustomer.services.auth;
+package vn.esoft.platform.icustomer.model.services.auth;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -11,15 +11,15 @@ import vn.esoft.platform.icustomer.controllers.dto.request.AuthentRequest;
 import vn.esoft.platform.icustomer.controllers.dto.request.RegisterRequest;
 import vn.esoft.platform.icustomer.controllers.dto.response.AuthenResponse;
 import vn.esoft.platform.icustomer.controllers.dto.response.RegisterResponse;
-import vn.esoft.platform.icustomer.entities.CustomerEntity;
-import vn.esoft.platform.icustomer.entities.SecurityTokenEntity;
+import vn.esoft.platform.icustomer.model.entities.CustomerEntity;
+import vn.esoft.platform.icustomer.model.entities.SecurityTokenEntity;
+import vn.esoft.platform.icustomer.model.services.JwtService;
 import vn.esoft.platform.icustomer.repositories.CustomerRolePermissionRepository;
 import vn.esoft.platform.icustomer.repositories.SecurityTokenRepository;
 import vn.esoft.platform.icustomer.repositories.UserRepository;
-import vn.esoft.platform.icustomer.services.AbstractAuthService;
-import vn.esoft.platform.icustomer.services.IAuthService;
-import vn.esoft.platform.icustomer.services.JwtService;
-import vn.esoft.platform.icustomer.services.user.UserService;
+import vn.esoft.platform.icustomer.model.services.AbstractAuthService;
+import vn.esoft.platform.icustomer.model.services.IAuthService;
+import vn.esoft.platform.icustomer.model.services.user.UserService;
 import vn.esoft.platform.icustomer.utils.CustomerUtils;
 
 import java.util.Map;

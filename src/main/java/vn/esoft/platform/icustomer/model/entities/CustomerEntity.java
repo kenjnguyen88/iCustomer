@@ -1,7 +1,6 @@
 
-package vn.esoft.platform.icustomer.entities;
+package vn.esoft.platform.icustomer.model.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Getter;

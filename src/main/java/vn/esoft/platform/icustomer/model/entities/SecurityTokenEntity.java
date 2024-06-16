@@ -1,4 +1,4 @@
-package vn.esoft.platform.icustomer.entities;
+package vn.esoft.platform.icustomer.model.entities;
 
 import jakarta.persistence.*;
 import lombok.Getter;

@@ -1,4 +1,4 @@
-package vn.esoft.platform.icustomer.services.user;
+package vn.esoft.platform.icustomer.model.services.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -7,15 +7,15 @@ import org.springframework.stereotype.Service;
 import vn.esoft.platform.icustomer.controllers.dto.request.AssignRoleRequest;
 import vn.esoft.platform.icustomer.controllers.dto.response.CustomerInfoResponse;
 import vn.esoft.platform.icustomer.controllers.dto.response.PageData;
-import vn.esoft.platform.icustomer.entities.CustomerEntity;
-import vn.esoft.platform.icustomer.entities.CustomerRoleEntity;
-import vn.esoft.platform.icustomer.entities.CustomerRolePermissionEntity;
-import vn.esoft.platform.icustomer.entities.RoleEntity;
+import vn.esoft.platform.icustomer.model.entities.CustomerEntity;
+import vn.esoft.platform.icustomer.model.entities.CustomerRoleEntity;
+import vn.esoft.platform.icustomer.model.entities.CustomerRolePermissionEntity;
+import vn.esoft.platform.icustomer.model.entities.RoleEntity;
+import vn.esoft.platform.icustomer.model.services.IUserService;
 import vn.esoft.platform.icustomer.repositories.CustomerRolePermissionRepository;
 import vn.esoft.platform.icustomer.repositories.CustomerRoleRepository;
 import vn.esoft.platform.icustomer.repositories.RoleRepository;
 import vn.esoft.platform.icustomer.repositories.UserRepository;
-import vn.esoft.platform.icustomer.services.IUserService;
 
 import java.util.ArrayList;
 import java.util.List;

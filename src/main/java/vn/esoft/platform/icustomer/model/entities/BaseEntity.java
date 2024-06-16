@@ -1,4 +1,4 @@
-package vn.esoft.platform.icustomer.entities;
+package vn.esoft.platform.icustomer.model.entities;
 
 import java.io.Serial;
 import java.io.Serializable;

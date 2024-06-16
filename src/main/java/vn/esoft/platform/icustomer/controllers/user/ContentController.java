@@ -4,10 +4,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import vn.esoft.platform.icustomer.controllers.BaseController;
-import vn.esoft.platform.icustomer.services.auth.EsoftAuthService;
-import vn.esoft.platform.icustomer.services.auth.FacebookAuthService;
-import vn.esoft.platform.icustomer.services.auth.GoogleAuthService;
-import vn.esoft.platform.icustomer.services.user.UserService;
+import vn.esoft.platform.icustomer.model.services.auth.EsoftAuthService;
+import vn.esoft.platform.icustomer.model.services.auth.FacebookAuthService;
+import vn.esoft.platform.icustomer.model.services.auth.GoogleAuthService;
+import vn.esoft.platform.icustomer.model.services.user.UserService;
 
 @RequestMapping("/content/v1")
 @RestController

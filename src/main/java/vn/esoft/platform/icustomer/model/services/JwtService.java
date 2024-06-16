@@ -1,4 +1,4 @@
-package vn.esoft.platform.icustomer.services;
+package vn.esoft.platform.icustomer.model.services;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -8,8 +8,8 @@ import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import vn.esoft.platform.icustomer.entities.SecurityTokenEntity;
-import vn.esoft.platform.icustomer.entities.vo.TokenStatusEnum;
+import vn.esoft.platform.icustomer.model.entities.SecurityTokenEntity;
+import vn.esoft.platform.icustomer.model.entities.vo.TokenStatusEnum;
 
 import java.security.Key;
 import java.time.Instant;
