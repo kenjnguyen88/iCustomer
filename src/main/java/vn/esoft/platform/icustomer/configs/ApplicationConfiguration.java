@@ -1,5 +1,6 @@
 package vn.esoft.platform.icustomer.configs;
 
+import lombok.RequiredArgsConstructor;
 import vn.esoft.platform.icustomer.repositories.UserRepository;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,19 +11,24 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import vn.esoft.platform.icustomer.services.UserService;
 
 @Configuration
+@RequiredArgsConstructor
 public class ApplicationConfiguration {
-    private final UserRepository userRepository;
 
-    public ApplicationConfiguration(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    }
+    private final UserRepository userRepository;
+    private final UserService userService;
+
+//    public ApplicationConfiguration(UserRepository userRepository) {
+//        this.userRepository = userRepository;
+//    }
 
     @Bean
     UserDetailsService userDetailsService() {
-        return username -> userRepository.findByEmail(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+//        return username -> userRepository.findByEmail(username)
+//                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        return username -> userService.fetchCustomerInfo(username);
     }
 
     @Bean

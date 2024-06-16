@@ -72,12 +72,10 @@ public class AuthentService implements IAuthentService {
                 List<CustomerRolePermissionEntity> permissionEntities = customerRolePermissionRepository.findByCustomerId(optCust.get().getId());
 
                 List<String> roles = permissionEntities.stream().map(CustomerRolePermissionEntity::getRoleName).distinct().toList();
-                Set<GrantedAuthority> authorities = new HashSet<>();
-                roles.forEach(e -> {
-                    authorities.add(new SimpleGrantedAuthority(e));
-                });
-
                 List<String> permissions = permissionEntities.stream().map(CustomerRolePermissionEntity::getPermissionName).toList();
+
+                optCust.get().setRoles(roles);
+                optCust.get().setPermissions(permissions);
 
                 Map<String, Object> claims = null;
                 claims = CustomerUtils.claims(optCust.get(), roles, permissions);

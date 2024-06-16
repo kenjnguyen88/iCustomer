@@ -1,14 +1,18 @@
 
 package vn.esoft.platform.icustomer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.io.Serial;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
@@ -47,6 +51,14 @@ public class CustomerEntity extends BaseEntity implements UserDetails {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Transient
+    private List<String> roles;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Transient
+    private List<String> permissions;
+
     public CustomerEntity() {
         this.createdAt();
     }
@@ -57,9 +69,20 @@ public class CustomerEntity extends BaseEntity implements UserDetails {
         this.password = password;
     }
 
+//    @Override
+//    public Collection<? extends GrantedAuthority> getAuthorities() {
+//        return List.of();
+//    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of();
+
+        List<SimpleGrantedAuthority> authorityList = new ArrayList<>();
+        this.getRoles().forEach(e->{
+            SimpleGrantedAuthority authority = new SimpleGrantedAuthority("ROLE_" + e.toString());
+            authorityList.add(authority);
+        });
+        return authorityList;
     }
 
     @Override

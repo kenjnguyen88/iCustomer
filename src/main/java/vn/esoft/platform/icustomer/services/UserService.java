@@ -3,8 +3,6 @@ package vn.esoft.platform.icustomer.services;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import vn.esoft.platform.icustomer.controllers.request.AssignRoleRequest;
 import vn.esoft.platform.icustomer.controllers.response.CustomerInfoResponse;
@@ -13,13 +11,14 @@ import vn.esoft.platform.icustomer.entities.CustomerEntity;
 import vn.esoft.platform.icustomer.entities.CustomerRoleEntity;
 import vn.esoft.platform.icustomer.entities.CustomerRolePermissionEntity;
 import vn.esoft.platform.icustomer.entities.RoleEntity;
-import vn.esoft.platform.icustomer.entities.vo.PermissionEnum;
 import vn.esoft.platform.icustomer.repositories.CustomerRolePermissionRepository;
 import vn.esoft.platform.icustomer.repositories.CustomerRoleRepository;
 import vn.esoft.platform.icustomer.repositories.RoleRepository;
 import vn.esoft.platform.icustomer.repositories.UserRepository;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -74,5 +73,20 @@ public class UserService {
                 .total(pageCustomers.getTotalElements())
                 .data(data)
                 .build();
+    }
+
+    public CustomerEntity fetchCustomerInfo(final String username) {
+        Optional<CustomerEntity> optCust = userRepository.findByEmail(username);
+        if (optCust.isPresent()) {
+            List<CustomerRolePermissionEntity> permissionEntities = customerRolePermissionRepository.findByCustomerId(optCust.get().getId());
+
+            List<String> roles = permissionEntities.stream().map(CustomerRolePermissionEntity::getRoleName).distinct().toList();
+            List<String> permissions = permissionEntities.stream().map(CustomerRolePermissionEntity::getPermissionName).toList();
+
+            optCust.get().setRoles(roles);
+            optCust.get().setPermissions(permissions);
+            return optCust.get();
+        }
+        return null;
     }
 }
