@@ -1,4 +1,4 @@
-package vn.esoft.platform.icustomer.controllers.response;
+package vn.esoft.platform.icustomer.controllers.dto.response;
 
 import lombok.Builder;
 import lombok.Getter;

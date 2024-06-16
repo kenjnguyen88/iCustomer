@@ -1,6 +1,9 @@
 package vn.esoft.platform.icustomer.entities;
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -8,6 +11,9 @@ import java.time.Instant;
 
 @Table(name = "security_tokens")
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
 public class SecurityTokenEntity extends BaseEntity implements Serializable {
     @Serial
     private static final long serialVersionUID = 7772311196128235344L;
@@ -17,8 +23,8 @@ public class SecurityTokenEntity extends BaseEntity implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "user_id", nullable = false)
-    private String customerId;
+    @Column(name = "customer_id", nullable = false)
+    private Long customerId;
 
     @Column(name = "access_token", nullable = false)
     private String accessToken;
@@ -50,11 +56,11 @@ public class SecurityTokenEntity extends BaseEntity implements Serializable {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
-    public String getCustomerId() {
+    public Long getCustomerId() {
         return customerId;
     }
 
-    public void setCustomerId(String customerId) {
+    public void setCustomerId(Long customerId) {
         this.customerId = customerId;
     }
 
@@ -139,7 +145,7 @@ public class SecurityTokenEntity extends BaseEntity implements Serializable {
     }
 
 
-    public SecurityTokenEntity(String customerId, String accessToken, String refreshToken, String status, Instant accessTokenExpiresAt, Instant refreshTokenExpiresAt, Instant issued_at) {
+    public SecurityTokenEntity(Long customerId, String accessToken, String refreshToken, String status, Instant accessTokenExpiresAt, Instant refreshTokenExpiresAt, Instant issued_at) {
         this.customerId = customerId;
         this.accessToken = accessToken;
         this.refreshToken = refreshToken;

@@ -14,6 +14,6 @@ public interface CustomerRoleRepository extends JpaRepository<CustomerRoleEntity
 
     @Query(value = "SELECT id, customer_id, role_id, created_at, created_by, updated_at, updated_by FROM customers_roles cr WHERE cr.customer_id = ?1", nativeQuery = true)
     Optional<List<CustomerRoleEntity>> findCustomerId(final Long customerId);
-    @Query(value = "SELECT customer_id, role_id FROM customers_roles cr WHERE cr.customer_id = ?1 and cr.role_id = ?2", nativeQuery = true)
+    @Query(value = "SELECT id, customer_id, role_id, created_at, created_by, updated_at, updated_by FROM customers_roles cr WHERE cr.customer_id = ?1 and cr.role_id = ?2", nativeQuery = true)
     Optional<CustomerRoleEntity> findByCustomerRole(final Long customerId, final Long roleId);
 }

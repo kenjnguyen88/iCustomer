@@ -1,10 +1,10 @@
-package vn.esoft.platform.icustomer.controllers;
+package vn.esoft.platform.icustomer.controllers.user;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import vn.esoft.platform.icustomer.services.UserService;
+import vn.esoft.platform.icustomer.services.user.UserService;
 
 @RequestMapping("/content/v1")
 @RestController

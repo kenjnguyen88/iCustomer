@@ -5,17 +5,11 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.repository.query.Param;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-import vn.esoft.platform.icustomer.controllers.request.AssignRoleRequest;
-import vn.esoft.platform.icustomer.controllers.request.RegisterRequest;
-import vn.esoft.platform.icustomer.controllers.response.CustomerInfoResponse;
-import vn.esoft.platform.icustomer.controllers.response.PageData;
-import vn.esoft.platform.icustomer.services.UserService;
-
-import java.util.List;
+import org.springframework.web.bind.annotation.*;
+import vn.esoft.platform.icustomer.controllers.dto.request.AssignRoleRequest;
+import vn.esoft.platform.icustomer.controllers.dto.request.RegisterRequest;
+import vn.esoft.platform.icustomer.controllers.dto.response.PageData;
+import vn.esoft.platform.icustomer.services.user.UserService;
 
 @RequestMapping("/admin/v1")
 @RestController
@@ -40,8 +34,8 @@ public class AdminController {
         return ResponseEntity.ok("success");
     }
 
-    @PostMapping("/user/all")
-//    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
+    @GetMapping("/user/all")
+    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN')")
     public ResponseEntity<PageData<Object>> getAllUser(@Param("pageSize") int pageSize, @Param("pageNum") int pageNum ) {
         PageRequest pageRequest = PageRequest.of(pageNum, pageSize);
 

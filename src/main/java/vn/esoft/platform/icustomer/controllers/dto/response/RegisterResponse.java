@@ -1,4 +1,4 @@
-package vn.esoft.platform.icustomer.controllers.response;
+package vn.esoft.platform.icustomer.controllers.dto.response;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
