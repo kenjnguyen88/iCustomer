@@ -32,12 +32,15 @@ public class SecurityConfiguration {
         this.authenticationProvider = authenticationProvider;
         this.jwtAuthenticationFilter = jwtAuthenticationFilter;
     }
-    
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf(AbstractHttpConfigurer::disable)
+
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry.requestMatchers(HttpMethod.DELETE).hasRole("SUPER_ADMIN")
+                                .requestMatchers("/login").permitAll()
+                                .requestMatchers("/login/**").permitAll()
                                 .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                                 .requestMatchers("/content/**").hasAnyRole("EDITOR", "GUEST")
                                 .requestMatchers("/auth/**").permitAll()

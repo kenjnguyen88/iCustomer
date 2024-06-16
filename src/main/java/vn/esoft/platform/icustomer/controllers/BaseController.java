@@ -6,10 +6,12 @@ import vn.esoft.platform.icustomer.services.IAuthService;
 import vn.esoft.platform.icustomer.services.auth.EsoftAuthService;
 import vn.esoft.platform.icustomer.services.auth.FacebookAuthService;
 import vn.esoft.platform.icustomer.services.auth.GoogleAuthService;
+import vn.esoft.platform.icustomer.services.user.UserService;
 
 @RequiredArgsConstructor
 public abstract class BaseController {
 
+    protected final UserService userService;
     protected final EsoftAuthService esoftAuthService;
     protected final GoogleAuthService googleAuthService;
     protected final FacebookAuthService facebookAuthService;

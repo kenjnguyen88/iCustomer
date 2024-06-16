@@ -8,15 +8,21 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import vn.esoft.platform.icustomer.controllers.BaseController;
 import vn.esoft.platform.icustomer.entities.CustomerEntity;
+import vn.esoft.platform.icustomer.services.auth.EsoftAuthService;
+import vn.esoft.platform.icustomer.services.auth.FacebookAuthService;
+import vn.esoft.platform.icustomer.services.auth.GoogleAuthService;
 import vn.esoft.platform.icustomer.services.user.UserService;
 
 @RequestMapping("/customer/v1")
 @RestController
-@RequiredArgsConstructor
-public class CustomerController {
+public class CustomerController extends BaseController {
 
-    private final UserService userService;
+
+    public CustomerController(UserService userService, EsoftAuthService esoftAuthService, GoogleAuthService googleAuthService, FacebookAuthService facebookAuthService) {
+        super(userService, esoftAuthService, googleAuthService, facebookAuthService);
+    }
 
     @GetMapping("/info")
     @PreAuthorize("hasAnyRole('EDITOR', 'GUEST', 'ADMIN', 'SUPER_ADMIN')")

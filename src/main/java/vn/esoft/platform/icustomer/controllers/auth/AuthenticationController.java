@@ -15,13 +15,15 @@ import vn.esoft.platform.icustomer.controllers.dto.response.RegisterResponse;
 import vn.esoft.platform.icustomer.services.auth.EsoftAuthService;
 import vn.esoft.platform.icustomer.services.auth.FacebookAuthService;
 import vn.esoft.platform.icustomer.services.auth.GoogleAuthService;
+import vn.esoft.platform.icustomer.services.user.UserService;
 
 @RequestMapping("/auth/v1")
 @RestController
 public class AuthenticationController extends BaseController {
 
-    public AuthenticationController(EsoftAuthService esoftAuthService, GoogleAuthService googleAuthService, FacebookAuthService facebookAuthService) {
-        super(esoftAuthService, googleAuthService, facebookAuthService);
+
+    public AuthenticationController(UserService userService, EsoftAuthService esoftAuthService, GoogleAuthService googleAuthService, FacebookAuthService facebookAuthService) {
+        super(userService, esoftAuthService, googleAuthService, facebookAuthService);
     }
 
     @PostMapping("/signup")
