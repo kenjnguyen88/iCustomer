@@ -65,7 +65,6 @@ public class AuthentService implements IAuthentService {
         Assert.hasText(request.getEmail(), "email cannot empty");
         Assert.hasText(request.getPassword(), "password cannot empty");
         Optional<CustomerEntity> optCust;
-//                = userRepository.findByEmail(request.getEmail());
         Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
         if (authentication.isAuthenticated()) {
             optCust = userRepository.findByEmail(request.getEmail());

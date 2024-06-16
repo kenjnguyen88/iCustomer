@@ -38,7 +38,7 @@ public class SecurityConfiguration {
         http.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorizationManagerRequestMatcherRegistry ->
                         authorizationManagerRequestMatcherRegistry.requestMatchers(HttpMethod.DELETE).hasRole("SUPER_ADMIN")
-                                .requestMatchers("/admin/**").hasAnyRole("ADMIN")
+                                .requestMatchers("/admin/**").hasAnyRole("ADMIN", "SUPER_ADMIN")
                                 .requestMatchers("/content/**").hasAnyRole("EDITOR", "GUEST")
                                 .requestMatchers("/auth/**").permitAll()
                                 .anyRequest().authenticated())
