@@ -59,12 +59,7 @@ public class EsoftAuthService extends AbstractAuthService implements IAuthServic
                         .accessToken(tokenEntity.getAccessToken())
                         .refreshToken(tokenEntity.getRefreshToken())
                         .userInfo(claims).build();
-                executor.execute(new Runnable() {
-                    @Override
-                    public void run() {
-                        securityToken(tokenEntity);
-                    }
-                });
+                this.saveTokenAsyncBy(tokenEntity);
             }
         }
 
@@ -109,8 +104,11 @@ public class EsoftAuthService extends AbstractAuthService implements IAuthServic
                         .accessToken(accessToken)
                         .refreshToken(optSecurityTokenEntity.get().getRefreshToken())
                         .build();
+                this.updateTokenAsyncBy(optSecurityTokenEntity.get());
             }
         }
         return response;
     }
+
+
 }

@@ -39,11 +39,29 @@ public abstract class AbstractAuthService implements IAuthService {
         return null;
     }
 
-    protected void securityToken(SecurityTokenEntity tokenEntity) {
+    private void securityToken(SecurityTokenEntity tokenEntity) {
         Optional<SecurityTokenEntity> optToken = tokenRepository.findByCustomerId(tokenEntity.getCustomerId());
         if (optToken.isPresent())
             tokenRepository.deleteById(optToken.get().getId());
         else
             tokenRepository.save(tokenEntity);
+    }
+
+    protected void saveTokenAsyncBy(SecurityTokenEntity entity) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                securityToken(entity);
+            }
+        });
+    }
+
+    protected void updateTokenAsyncBy(SecurityTokenEntity entity) {
+        executor.execute(new Runnable() {
+            @Override
+            public void run() {
+                tokenRepository.save(entity);
+            }
+        });
     }
 }
