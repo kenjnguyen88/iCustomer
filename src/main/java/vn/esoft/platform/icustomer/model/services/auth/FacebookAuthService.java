@@ -2,6 +2,7 @@ package vn.esoft.platform.icustomer.model.services.auth;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import vn.esoft.platform.icustomer.controllers.dto.request.AuthentRequest;
@@ -20,8 +21,9 @@ import java.util.concurrent.Executor;
 @Slf4j
 public class FacebookAuthService extends AbstractAuthService implements IAuthService {
 
-    public FacebookAuthService(UserRepository userRepository, UserService userService, CustomerRolePermissionRepository customerRolePermissionRepository, SecurityTokenRepository tokenRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService, Executor executor) {
-        super(userRepository, userService, customerRolePermissionRepository, tokenRepository, passwordEncoder, authenticationManager, jwtService, executor);
+
+    public FacebookAuthService(UserRepository userRepository, UserService userService, UserDetailsService userDetailsService, CustomerRolePermissionRepository customerRolePermissionRepository, SecurityTokenRepository tokenRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService, Executor executor) {
+        super(userRepository, userService, userDetailsService, customerRolePermissionRepository, tokenRepository, passwordEncoder, authenticationManager, jwtService, executor);
     }
 
     @Override

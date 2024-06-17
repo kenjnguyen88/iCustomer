@@ -4,25 +4,29 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
 import vn.esoft.platform.icustomer.controllers.dto.request.AuthentRequest;
+import vn.esoft.platform.icustomer.controllers.dto.request.RefreshTokenRequest;
 import vn.esoft.platform.icustomer.controllers.dto.request.RegisterRequest;
 import vn.esoft.platform.icustomer.controllers.dto.response.AuthenResponse;
+import vn.esoft.platform.icustomer.controllers.dto.response.RefreshTokenResponse;
 import vn.esoft.platform.icustomer.controllers.dto.response.RegisterResponse;
 import vn.esoft.platform.icustomer.model.entities.CustomerEntity;
 import vn.esoft.platform.icustomer.model.entities.SecurityTokenEntity;
+import vn.esoft.platform.icustomer.model.services.AbstractAuthService;
+import vn.esoft.platform.icustomer.model.services.IAuthService;
 import vn.esoft.platform.icustomer.model.services.JwtService;
+import vn.esoft.platform.icustomer.model.services.user.UserService;
 import vn.esoft.platform.icustomer.repositories.CustomerRolePermissionRepository;
 import vn.esoft.platform.icustomer.repositories.SecurityTokenRepository;
 import vn.esoft.platform.icustomer.repositories.UserRepository;
-import vn.esoft.platform.icustomer.model.services.AbstractAuthService;
-import vn.esoft.platform.icustomer.model.services.IAuthService;
-import vn.esoft.platform.icustomer.model.services.user.UserService;
 import vn.esoft.platform.icustomer.utils.CustomerUtils;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.concurrent.Executor;
 
 @Service
@@ -30,8 +34,8 @@ import java.util.concurrent.Executor;
 public class EsoftAuthService extends AbstractAuthService implements IAuthService {
 
 
-    public EsoftAuthService(UserRepository userRepository, UserService userService, CustomerRolePermissionRepository customerRolePermissionRepository, SecurityTokenRepository tokenRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService, Executor executor) {
-        super(userRepository, userService, customerRolePermissionRepository, tokenRepository, passwordEncoder, authenticationManager, jwtService, executor);
+    public EsoftAuthService(UserRepository userRepository, UserService userService, UserDetailsService userDetailsService, CustomerRolePermissionRepository customerRolePermissionRepository, SecurityTokenRepository tokenRepository, PasswordEncoder passwordEncoder, AuthenticationManager authenticationManager, JwtService jwtService, Executor executor) {
+        super(userRepository, userService, userDetailsService, customerRolePermissionRepository, tokenRepository, passwordEncoder, authenticationManager, jwtService, executor);
     }
 
     @Override
@@ -82,4 +86,31 @@ public class EsoftAuthService extends AbstractAuthService implements IAuthServic
         return RegisterResponse.builder().email(entity.getEmail()).fullName(entity.getFullName()).build();
     }
 
+    @Override
+    public RefreshTokenResponse refreshToken(RefreshTokenRequest request) {
+
+        RefreshTokenResponse response = null;
+        String username = jwtService.extractUsername(request.getRefreshToken());
+        if (null == username) {
+            throw new RuntimeException("The user not exist!");
+        }
+        CustomerEntity customer = userService.fetchCustomerInfo(username);
+        if (null == customer) {
+            throw new RuntimeException("The user not exist!");
+        }
+        if (jwtService.isTokenValid(request.getRefreshToken(), customer.getEmail())) {
+            Optional<SecurityTokenEntity> optSecurityTokenEntity = tokenRepository.findByCustomerId(customer.getId());
+            if (optSecurityTokenEntity.isPresent()) {
+                Map<String, Object> claims = CustomerUtils.claims(customer);
+                String accessToken = jwtService.generateToken(claims, customer);
+                optSecurityTokenEntity.get().setAccessToken(accessToken);
+                response = RefreshTokenResponse.builder()
+                        .customerId(customer.getId())
+                        .accessToken(accessToken)
+                        .refreshToken(optSecurityTokenEntity.get().getRefreshToken())
+                        .build();
+            }
+        }
+        return response;
+    }
 }

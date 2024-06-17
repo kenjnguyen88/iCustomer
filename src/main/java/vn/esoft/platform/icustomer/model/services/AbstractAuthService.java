@@ -2,8 +2,12 @@ package vn.esoft.platform.icustomer.model.services;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import vn.esoft.platform.icustomer.controllers.dto.request.RefreshTokenRequest;
 import vn.esoft.platform.icustomer.controllers.dto.request.RegisterRequest;
+import vn.esoft.platform.icustomer.controllers.dto.response.AuthenResponse;
+import vn.esoft.platform.icustomer.controllers.dto.response.RefreshTokenResponse;
 import vn.esoft.platform.icustomer.controllers.dto.response.RegisterResponse;
 import vn.esoft.platform.icustomer.model.entities.SecurityTokenEntity;
 import vn.esoft.platform.icustomer.model.services.user.UserService;
@@ -19,6 +23,7 @@ public abstract class AbstractAuthService implements IAuthService {
 
     protected final UserRepository userRepository;
     protected final UserService userService;
+    protected final UserDetailsService userDetailsService;
     protected final CustomerRolePermissionRepository customerRolePermissionRepository;
     protected final SecurityTokenRepository tokenRepository;
     protected final PasswordEncoder passwordEncoder;
@@ -27,6 +32,10 @@ public abstract class AbstractAuthService implements IAuthService {
     protected final Executor executor;
 
     public RegisterResponse signup(RegisterRequest request) {
+        return null;
+    }
+
+    public RefreshTokenResponse refreshToken(RefreshTokenRequest request) {
         return null;
     }
 

@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import vn.esoft.platform.icustomer.controllers.BaseController;
 import vn.esoft.platform.icustomer.controllers.dto.request.AuthentRequest;
+import vn.esoft.platform.icustomer.controllers.dto.request.RefreshTokenRequest;
 import vn.esoft.platform.icustomer.controllers.dto.request.RegisterRequest;
 import vn.esoft.platform.icustomer.controllers.dto.response.AuthenResponse;
+import vn.esoft.platform.icustomer.controllers.dto.response.RefreshTokenResponse;
 import vn.esoft.platform.icustomer.controllers.dto.response.RegisterResponse;
 import vn.esoft.platform.icustomer.model.services.auth.EsoftAuthService;
 import vn.esoft.platform.icustomer.model.services.auth.FacebookAuthService;
@@ -38,6 +40,14 @@ public class AuthenticationController extends BaseController {
     public ResponseEntity<AuthenResponse> authenticate(@Param("provider") String provider,
                                                        @RequestBody AuthentRequest request) {
         AuthenResponse response = this.authService(provider).authenticate(request);
+        return ResponseEntity.ok(response);
+    }
+
+    @PostMapping("/refresh")
+    @PermitAll()
+    public ResponseEntity<RefreshTokenResponse> refreshToken(@Param("provider") String provider,
+                                                             @RequestBody RefreshTokenRequest request) {
+        RefreshTokenResponse response = esoftAuthService.refreshToken(request);
         return ResponseEntity.ok(response);
     }
 }

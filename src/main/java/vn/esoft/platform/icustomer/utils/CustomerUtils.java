@@ -17,4 +17,14 @@ public class CustomerUtils {
         claims.put("permissions", permissions);
         return claims;
     }
+
+    public static Map<String, Object> claims(CustomerEntity customer) {
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("customerId", customer.getId());
+        claims.put("email", customer.getEmail());
+        claims.put("fullName", customer.getFullName());
+        claims.put("roles", customer.getRoles());
+        claims.put("permissions", customer.getPermissions());
+        return claims;
+    }
 }
